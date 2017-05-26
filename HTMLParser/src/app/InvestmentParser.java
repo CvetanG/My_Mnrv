@@ -53,7 +53,7 @@ public class InvestmentParser {
 			i ++;
 		}
 		
-		for (int j = 1; j < i-1; j++) {
+		for (int j = 1; j < i; j++) {
 			Document tavex = Jsoup.connect(myUrl + "/page/" + j + "/#s")
 					.timeout(10000).validateTLSCertificates(false)
 					.get();
