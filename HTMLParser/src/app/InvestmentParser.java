@@ -107,6 +107,7 @@ public class InvestmentParser {
 		myCoinsStrings.add("1 унция златен канадски кленов лист");
 //		myCoinsStrings.add("1 унция златна австрийска филхармония");
 		myCoinsStrings.add("5 грама златно кюлче PAMP Фортуна");
+		myCoinsStrings.add("1 унция златна китайска панда от 2009");
 		
 		getFromTavex();
 		getGoldFromTavex();
