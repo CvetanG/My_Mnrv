@@ -1,0 +1,166 @@
+FUNCTION get_vods(p_account_id         IN NUMBER,
+                    p_customer_id        IN VARCHAR2,
+                    p_localization_id    IN NUMBER,
+                    p_device_id          IN NUMBER,
+                    p_is_free            IN NUMBER,
+                    p_is_parental        IN NUMBER,
+                    p_block_unrated      IN NUMBER,
+                    p_movie_not_rated_id IN NUMBER,
+                    p_tv_Rating          IN NUMBER,
+                    p_sex_Rating         IN VARCHAR2,
+                    p_violence_Rating    IN VARCHAR2,
+                    p_language_Rating    IN VARCHAR2,
+                    p_dialog_Rating      IN VARCHAR2,
+                    p_fv_Rating          IN VARCHAR2,
+                    pis_expires_in       IN VARCHAR2 DEFAULT '',
+                    p_min_paging         IN NUMBER,
+                    p_max_paging         IN NUMBER) RETURN vod_tab_type IS
+    lot_vods vod_tab_type;
+
+    ls_expires_date VARCHAR2(50);
+
+    lt_user_pref md_data_types.rating_flags_rec_type;
+
+    ls_block_rules VARCHAR2(15000);
+
+    ls_query    VARCHAR2(30000);
+    ls_part_1   VARCHAR2(30000);
+    ls_part_2   VARCHAR2(30000);
+    ls_part_3   VARCHAR2(30000);
+    ls_part_4   VARCHAR2(30000);
+    ls_part_5   VARCHAR2(30000);
+  BEGIN
+    lt_user_pref.account_id := p_account_id;
+    lt_user_pref.device_id  := p_device_id;
+
+    ls_block_rules := md_search_api.get_rules_id_string(pir_user_pref => lt_user_pref);
+
+    ls_part_1 := 'SELECT vod_rec_type(asset_id, title, reduced_title, alt_title, description, description1, reduced_desc, advisory_desc, advisory_desc1, advisory_desc2, advisory_desc3,    ' || CHR(10) ||
+    '       advisory_desc4, advisory_desc5, cast_first_name, cast_first_name1, cast_last_name, cast_last_name1, cast_role_desc, cast_role_desc1, credits_first_name,                        ' || CHR(10) ||
+    '       credits_first_name1, credits_last_name, credits_last_name1, credits_role_desc, credits_role_desc1, category, sub_category, sub_sub_category, released_year,                     ' || CHR(10) ||
+    '       asset_rating, star_rating, run_time, program_language, subtitle_language, made_for_tv, episode_title, org_air_date, asset_type, start_vod_set_id, supplier_id,                  ' || CHR(10) ||
+    '       encode_type, trailer_id, create_date, modify_date, obsolete_date, vs_file, status, sp_path, sp_file, image_id, start_vod_set_date, distributor, close_caption,                  ' || CHR(10) ||
+    '       more_info_link, priority, is_bundled, share_type, share_id, host_ip_address, end_vod_date, dolby_digital, start_vod_date, studio_royalty_flat_rate,studio_royalty_minimum,      ' || CHR(10) ||
+    '       studio_royalty_percent, provider_asset_id, customer_asset_type, tv_rating_id, sex_rating, violence_rating, language_rating, dialog_rating, fv_rating, tvn_provider,             ' || CHR(10) ||
+    '       tvn_provider_id, tvn_provider_content_tier, tvn_asset_id, tvn_asset_name, tvn_asset_type, tvn_version_major, tvn_version_minor, tvn_season_premiere,tvn_billing_id,             ' || CHR(10) ||
+    '       tvn_suggested_price, tvn_royalty_percent, tvn_royalty_min, tvn_royalty_flat_rate, copy_protection, encrypt, hdcontent, protocol, trick_play, download_allowed,                  ' || CHR(10) ||
+    '       cnt_id, resource_type, version, is_subscription_part, movie_rating_id, parental_filter, price, rent_time, cnt_title, cte_id, show_order, parent_id, account_id,                 ' || CHR(10) ||
+    '       tv_rating_name, asset_rating_name, root_content_id, sr_vs_id, sr_ip, sr_port, sr_vs_type, pr_rent_id, pr_position, pr_due_date, pr_rent_type, pr_vod_set_id,                    ' || CHR(10) ||
+    '       pr_nvod_set_id, pr_notification_flag, pr_transaction_id, localization_id, localization_price, is_free)                                                                                   ' || CHR(10) ||
+    '  FROM ( ' || CHR(10) ||
+    '  SELECT rownum rn, t1.*     ' || CHR(10) ||
+    '    FROM                     ' || CHR(10) ||
+    '    (                        ' || CHR(10) ||
+    '  SELECT  asset_id, title, reduced_title, alt_title, description, description1, reduced_desc, advisory_desc, advisory_desc1, advisory_desc2, advisory_desc3, ' || CHR(10) ||
+    '          advisory_desc4, advisory_desc5, cast_first_name, cast_first_name1, cast_last_name, cast_last_name1, cast_role_desc, cast_role_desc1, credits_first_name,    ' || CHR(10) ||
+    '          credits_first_name1, credits_last_name, credits_last_name1, credits_role_desc, credits_role_desc1, category, sub_category, sub_sub_category, released_year, ' || CHR(10) ||
+    '          asset_rating, star_rating, run_time, program_language, subtitle_language, made_for_tv, episode_title, org_air_date, asset_type, start_vod_set_id, supplier_id, ' || CHR(10) ||
+    '          encode_type, trailer_id, create_date, modify_date, obsolete_date, vs_file, status, sp_path, sp_file, image_id, start_vod_set_date, distributor, close_caption, ' || CHR(10) ||
+    '          more_info_link, priority, is_bundled, share_type, share_id, host_ip_address, end_vod_date, dolby_digital, start_vod_date, studio_royalty_flat_rate,studio_royalty_minimum, ' || CHR(10) ||
+    '          studio_royalty_percent, provider_asset_id, customer_asset_type, tv_rating_id, sex_rating, violence_rating, language_rating, dialog_rating, fv_rating, tvn_provider, ' || CHR(10) ||
+    '          tvn_provider_id, tvn_provider_content_tier, tvn_asset_id, tvn_asset_name, tvn_asset_type, tvn_version_major, tvn_version_minor, tvn_season_premiere,tvn_billing_id, ' || CHR(10) ||
+    '          tvn_suggested_price, tvn_royalty_percent, tvn_royalty_min, tvn_royalty_flat_rate, copy_protection, encrypt, hdcontent, protocol, trick_play, download_allowed,      ' || CHR(10) ||
+    '          cnt_id, resource_type, version, is_subscription_part, movie_rating_id, parental_filter, price, rent_time, cnt_title,0 cte_id, show_order,0 parent_id, account_id,     ' || CHR(10) ||
+    '          tv_rating_name, asset_rating_name,0 root_content_id, sr_vs_id, sr_ip, sr_port, sr_vs_type, pr_rent_id, pr_position, pr_due_date, pr_rent_type, pr_vod_set_id,        ' || CHR(10) ||
+    '          pr_nvod_set_id, pr_notification_flag, pr_transaction_id, localization_id, localization_price, is_free                                                                                                                                                                                                                                                                                                                ' || CHR(10) ||
+    '  FROM                                                                                                                                                                         ' || CHR(10) ||
+    '  ( ';
+
+    IF (LENGTH(pis_expires_in) > 0) THEN
+      ls_expires_date := TO_CHAR(sysdate + TO_NUMBER(pis_expires_in), 'YYYY-MM-DD');
+      ls_part_2 := '    with vods as ( select vods.* from  vw_vods vods where vods.end_vod_date <= TO_DATE(''' || ls_expires_date || ''', ''YYYY-MM-DD HH24:MI:SS'' ))' || CHR(10);
+    ELSE
+      ls_part_2 := '    with vods as ( select vods.* from  vw_vods vods ) ' || CHR(10);
+    END IF;
+
+    ls_part_3 := '      select vods.ASSET_ID, vods.TITLE, vods.REDUCED_TITLE, vods.ALT_TITLE, vods.DESCRIPTION, vods.DESCRIPTION1, vods.REDUCED_DESC, vods.ADVISORY_DESC,                            ' || CHR(10) ||
+                 '             vods.ADVISORY_DESC1, vods.ADVISORY_DESC2, vods.ADVISORY_DESC3, vods.ADVISORY_DESC4, vods.ADVISORY_DESC5, vods.CAST_FIRST_NAME, vods.CAST_FIRST_NAME1,                 ' || CHR(10) ||
+                 '             vods.CAST_LAST_NAME, vods.CAST_LAST_NAME1, vods.CAST_ROLE_DESC, vods.CAST_ROLE_DESC1, vods.CREDITS_FIRST_NAME, vods.CREDITS_FIRST_NAME1, vods.CREDITS_LAST_NAME,      ' || CHR(10) ||
+                   '               vods.CREDITS_LAST_NAME1, vods.CREDITS_ROLE_DESC, vods.CREDITS_ROLE_DESC1, vods.CATEGORY, vods.SUB_CATEGORY, vods.SUB_SUB_CATEGORY, vods.RELEASED_YEAR,                ' || CHR(10) ||
+                   '               vods.ASSET_RATING, vods.STAR_RATING, vods.RUN_TIME, vods.PROGRAM_LANGUAGE, vods.SUBTITLE_LANGUAGE, vods.MADE_FOR_TV, vods.EPISODE_TITLE, vods.ORG_AIR_DATE,           ' || CHR(10) ||
+                 '               vods.ASSET_TYPE, vods.START_VOD_SET_ID, vods.SUPPLIER_ID, vods.ENCODE_TYPE, vods.TRAILER_ID, vods.CREATE_DATE, vods.MODIFY_DATE, vods.OBSOLETE_DATE, vods.VS_FILE,    ' || CHR(10) ||
+                 '               vods.STATUS, vods.SP_PATH, vods.SP_FILE, vods.IMAGE_ID, vods.START_VOD_SET_DATE, vods.DISTRIBUTOR, vods.CLOSE_CAPTION, vods.MORE_INFO_LINK, vods.PRIORITY,            ' || CHR(10) ||
+                 '               vods.IS_BUNDLED,  vods.SHARE_TYPE, vods.SHARE_ID, vods.HOST_IP_ADDRESS, vods.END_VOD_DATE, vods.DOLBY_DIGITAL, vods.START_VOD_DATE, vods.STUDIO_ROYALTY_FLAT_RATE,    ' || CHR(10) ||
+                 '               vods.STUDIO_ROYALTY_MINIMUM, vods.STUDIO_ROYALTY_PERCENT, vods.PROVIDER_ASSET_ID, vods.CUSTOMER_ASSET_TYPE, vods.TV_RATING_ID, vods.SEX_RATING, vods.VIOLENCE_RATING, ' || CHR(10) ||
+                 '               vods.LANGUAGE_RATING, vods.DIALOG_RATING, vods.FV_RATING, vods.TVN_PROVIDER, vods.TVN_PROVIDER_ID, vods.TVN_PROVIDER_CONTENT_TIER, vods.TVN_ASSET_ID,                 ' || CHR(10) ||
+                 '               vods.TVN_ASSET_NAME, vods.TVN_ASSET_TYPE, vods.TVN_VERSION_MAJOR, vods.TVN_VERSION_MINOR, vods.TVN_SEASON_PREMIERE, vods.TVN_BILLING_ID, vods.TVN_SUGGESTED_PRICE, ' || CHR(10) ||
+                 '               vods.TVN_ROYALTY_PERCENT, vods.TVN_ROYALTY_MIN, vods.TVN_ROYALTY_FLAT_RATE, vods.COPY_PROTECTION, vods.ENCRYPT, vods.HDCONTENT, vods.PROTOCOL, vods.trick_play,    ' || CHR(10) ||
+                 '               vods.download_allowed, vods.cnt_id, vods.resource_type resource_type, vods.version version, vods.is_subscription_part is_subscription_part,                        ' || CHR(10) ||
+                 '             vods.movie_rating_id movie_rating_id, vods.parental_filter parental_filter, nvl(arp.price, vods.price) as price, vods.rent_time, vods.cnt_title cnt_title,         ' || CHR(10) ||
+                 '             0 cte_id, vods.show_order, 0 parent_id, '''|| p_account_id  ||'''  as  account_id, vods.tv_rating_name tv_rating_name, vods.asset_rating_name asset_rating_name,   ' || CHR(10) ||
+                 '             0  root_content_id,                                                                                                                                                ' || CHR(10) ||
+                 '               case when rnt.rent_id is null then NULL else vods.sr_VS_ID end AS sr_VS_ID, ' || CHR(10) ||
+                 '             DECODE(rnt.vod_set_id, -1, DECODE(rnt.nvod_set_id, -1, 1, 0), 0) is_free,        ' || CHR(10) ||
+                 '             vods.sr_IP AS sr_IP, vods.sr_PORT AS sr_PORT, vods.sr_VS_TYPE AS sr_VS_TYPE, rnt.rent_id AS pr_RENT_ID, pl.position AS pr_POSITION, rnt.due_date AS pr_DUE_DATE,   ' || CHR(10) ||
+                 '             rnt.rent_type AS pr_RENT_TYPE, rnt.vod_set_id AS pr_VOD_SET_ID, rnt.nvod_set_id AS pr_NVOD_SET_ID, hrn.notification_flag AS pr_NOTIFICATION_FLAG,                  ' || CHR(10) ||
+                 '             rnt.transaction_id AS pr_transaction_id, arp.localization_id as localization_id, arp.price as localization_price                                                   ' || CHR(10) ||
+                 '        from vods                                                                                                                                                               ' || CHR(10) ||
+                 '             LEFT OUTER JOIN (select r.* from rent r where r.due_date >= sysdate and r.account_id = '''|| p_account_id  ||''' or ( r.account_id in (select ca.account_id from customer_account ca where customer_id = '''|| p_customer_id  ||''')   and  r.share_flag = ''Y'')) rnt on rnt.asset_id = vods.resource_id and rnt.account_id = ' || p_account_id  || '' || CHR(10) ||
+                 '             LEFT OUTER JOIN pause_log pl on vods.resource_id = pl.content_id and pl.account_id = '''|| p_account_id  ||''' and pl.content_type=''VOD''                         ' || CHR(10) ||
+                 '             LEFT OUTER JOIN hospitality_region hrn on hrn.rent_id = rnt.rent_id and hrn.customer_id = '''|| p_customer_id  ||''' and hrn.account_id  = '''|| p_account_id  ||'''   ' || CHR(10) ||
+                 '             LEFT OUTER JOIN ASSET_REGION_PRICES arp on arp.asset_id = vods.resource_id and arp.localization_id = '''|| p_localization_id  ||'''                                    ' || CHR(10) ||
+                 '             where                                                                                                                                                                  ' || CHR(10) ||
+                 '                (       resource_type =''ASSET''                                                                                                                                    ' || CHR(10) ||
+                 '                and  status = ''A''                                                                                                                                                 ' || CHR(10) ||
+                 '                and  vods.price > 0                                                                                                                                                ' || CHR(10) ||
+                 '                and ( is_subscription_part = 0 ' || CHR(10) ||
+                 ' or  vods.resource_id  in                                                                                                              ' || CHR(10) ||
+                 '                                    (select sas.asset_id from subscription_asset_set sas, tmp_CUSTOMER_SUBSCRIPTION_PKGS vw where sas.SUBSCRIPTION_PKG_ID = vw.SUBSCRIPTION_PKG_ID and vw.customer_id = '''|| p_customer_id  ||''' )      ' || CHR(10) ||
+                 '                    )                                                                                                                                                                                                                     ' || CHR(10) ||
+                 '                and ( (NOT(1 = '''|| p_is_free  ||'''))  OR (vods.price IS NULL OR vods.price = 0 OR  vods.is_subscription_part = 1 OR rnt.rent_id is not null))                                                                          ' || CHR(10) ||
+                 '                AND ( 0 = '''|| p_is_parental  ||'''                                                                                                                                                                                      ' || CHR(10) ||
+                 '                        OR ( vods.tv_rating_id IS NOT null AND vods.tv_rating_id > 0 AND vods.tv_rating_id <= '''|| p_tv_Rating  ||'''                                                                                                    ' || CHR(10) ||
+                 '                                AND (vods.sex_rating is null OR NOT(vods.sex_rating = ''Y'' and ''N'' = '''|| p_sex_Rating  ||''' ))                                                                                                      ' || CHR(10) ||
+                 '                                AND (vods.violence_rating is null OR NOT(vods.violence_rating = ''Y'' and ''N'' = '''|| p_violence_Rating  ||''' ))                                                                                       ' || CHR(10) ||
+                 '                                AND (vods.language_rating is null OR NOT(vods.language_rating = ''Y'' and ''N'' = '''|| p_language_Rating  ||''' ))                                                                                       ' || CHR(10) ||
+                 '                                AND (vods.dialog_rating is null OR NOT(vods.dialog_rating = ''Y'' and ''N'' = '''|| p_dialog_Rating  ||''' ))                                                                                             ' || CHR(10) ||
+                 '                                AND (vods.fv_rating is null OR NOT(vods.fv_rating = ''Y'' and ''N'' = ''' || p_fv_Rating  || '''))                                                                                                        ' || CHR(10) ||
+                 '                        )                                                                                                                                                                                                                 ' || CHR(10) ||
+                 '                        OR ( (vods.tv_rating_id IS null or vods.tv_rating_id <= 0) and vods.asset_rating is NOT null AND vods.movie_rating_id > 1 AND vods.movie_rating_id <= '''|| p_movie_not_rated_id  ||''' )                         ' || CHR(10) ||
+                 '                        OR ( (vods.tv_rating_id IS null or vods.tv_rating_id <= 0) and (vods.asset_rating is null or vods.movie_rating_id <=1) AND 0 = '''|| p_block_unrated  ||''' )                                                     ' || CHR(10) ||
+                 '                    )                                                                                                                                                                                                                     ' || CHR(10) ||
+                 '                )                                                                                                                                                                                                                         ' || CHR(10);
+
+    IF (LENGTH(ls_block_rules) > 0) THEN                            
+      ls_part_3 := ls_part_3 || '       AND NOT EXISTS (                                                                               ' || CHR(10) ||
+                                '         SELECT 1                                                                                     ' || CHR(10) ||
+                                '           FROM asset_rule_map arm                                                                    ' || CHR(10) ||
+                                '          WHERE arm.asset_id = vods.asset_id                                                             ' || CHR(10) ||
+                                '            AND NVL(arm.rule_id, 0) IN (' || ls_block_rules || ')                                     ' || CHR(10) ||
+                                '       )                                                                                              ' || CHR(10);
+    END IF;
+
+    ls_part_4 :=  '            ) x  ' || CHR(10) ||
+                  ' GROUP BY asset_id, title, reduced_title, alt_title, description, description1, reduced_desc, advisory_desc, advisory_desc1, advisory_desc2, advisory_desc3, '                       || CHR(10) ||
+                  ' advisory_desc4, advisory_desc5, cast_first_name, cast_first_name1, cast_last_name, cast_last_name1, cast_role_desc, cast_role_desc1, credits_first_name,    '                       || CHR(10) ||
+                  ' credits_first_name1, credits_last_name, credits_last_name1, credits_role_desc, credits_role_desc1, category, sub_category, sub_sub_category, released_year, '                       || CHR(10) ||
+                  ' asset_rating, star_rating, run_time, program_language, subtitle_language, made_for_tv, episode_title, org_air_date, asset_type, start_vod_set_id, supplier_id, '                    || CHR(10) ||
+                  ' encode_type, trailer_id, create_date, modify_date, obsolete_date, vs_file, status, sp_path, sp_file, image_id, start_vod_set_date, distributor, close_caption, '                    || CHR(10) ||
+                  ' more_info_link, priority, is_bundled, share_type, share_id, host_ip_address, end_vod_date, dolby_digital, start_vod_date, studio_royalty_flat_rate,studio_royalty_minimum, '        || CHR(10) ||
+                  ' studio_royalty_percent, provider_asset_id, customer_asset_type, tv_rating_id, sex_rating, violence_rating, language_rating, dialog_rating, fv_rating, tvn_provider, '               || CHR(10) ||
+                  ' tvn_provider_id, tvn_provider_content_tier, tvn_asset_id, tvn_asset_name, tvn_asset_type, tvn_version_major, tvn_version_minor, tvn_season_premiere,tvn_billing_id, '               || CHR(10) ||
+                  ' tvn_suggested_price, tvn_royalty_percent, tvn_royalty_min, tvn_royalty_flat_rate, copy_protection, encrypt, hdcontent, protocol, trick_play, download_allowed,      '               || CHR(10) ||
+                  ' cnt_id, resource_type, version, is_subscription_part, movie_rating_id, parental_filter, price, rent_time, cnt_title, cte_id, show_order, parent_id, account_id,     '               || CHR(10) ||
+                  ' tv_rating_name, asset_rating_name, root_content_id, sr_vs_id, sr_ip, sr_port, sr_vs_type, pr_rent_id, pr_position, pr_due_date, pr_rent_type, pr_vod_set_id,        '               || CHR(10) ||
+                  ' pr_nvod_set_id, pr_notification_flag, pr_transaction_id, localization_id, localization_price, is_free  ' || CHR(10);
+
+    IF (LENGTH(pis_expires_in) > 0) THEN
+      ls_part_4 := ls_part_4 || '            ORDER BY TRUNC(end_vod_date) ASC, title ' || CHR(10);
+    ELSE
+      ls_part_4 := ls_part_4 || '            ORDER BY create_date DESC, title ' || CHR(10);
+    END IF;
+
+    ls_part_4 := ls_part_4 || ' ) t1' || CHR(10);
+    ls_part_4 := ls_part_4 || ' )' || CHR(10);
+
+    ls_part_5 :=  'WHERE rn BETWEEN ' || p_min_paging  || ' AND ' || p_max_paging || CHR(10);
+
+    ls_query := ls_part_1 || ls_part_2 || ls_part_3 || ls_part_4  || ls_part_5;
+
+    dbms_output.put_line('<'|| ls_query ||'>');
+
+    EXECUTE IMMEDIATE ls_query
+    BULK COLLECT INTO lot_vods;
+
+    RETURN lot_vods;
+  END;
