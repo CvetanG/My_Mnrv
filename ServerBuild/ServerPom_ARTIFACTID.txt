@@ -1,0 +1,43 @@
+
+http://serverbuild1.minervanetworks.com:8080/job/11.IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        junit
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/11a.RPM_IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        junit
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/11.IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        junit
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/11a.RPM_IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        junit
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-latens-4.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        xtv-cas-base
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.4/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        xtv-cas-base
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.6/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        xtv-cas-base
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.8/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><artifactId>
+        xtv-cas-base
+      </artifactId>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/xtv-cas-aggregator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>

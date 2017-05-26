@@ -1,0 +1,183 @@
+
+http://serverbuild1.minervanetworks.com:8080/job/11.IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/11a.RPM_IncomingMsgGateway_ML/ws/notification-server-simulator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-latens-4.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.4/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.6/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/connector-verimatrix-3.8/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/xtv-cas-aggregator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/xtv-cas-api/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/xtv-cas-base/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/xtv-cas-client/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14a.xTV-cas_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/connector-latens-4.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/connector-verimatrix-3.4/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/connector-verimatrix-3.6/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/connector-verimatrix-3.8/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/xtv-cas-aggregator/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/xtv-cas-api/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/xtv-cas-base/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/xtv-cas-client/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14b.xTV-cas_ML_rpm/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/xtv-ws-client/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      xtv-ws-client
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/xtv-ws-core/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/xtv-ws-entity/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/xtv-ws-persistence/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/xtv-ws-recommendation/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14c.xTV-WS_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14d.OC4J_dataservices_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14e.RPM_OC4J_dataservices_ML/ws/mediaDemon2.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14f.RPM_VODDS_ML/ws/mediaDemon2.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/14h.Billing_Volia_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      billing-adapter-Volia
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/14i.Billing_ITCC_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      billing-adapter-ITCC
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/15.EPG-localepg_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      /localepg/deploy/${finalName}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/15a.RPM_localepg_ML/ws/localepg/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      /localepg/deploy/${finalName}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/15b.RPM_EPGIngest_ML/ws/common-modules/java_modules/epgIngestCommon/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      epgIngest-common
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/17.Billing_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/17a.RPM_billing_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/30.Enhydra_Admin_ML/ws/mediaDemon2.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/30a.RPM_admin_ML/ws/mediaDemon2.0/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/70.iTvMgrAC_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      ${finalName}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/70a.iTvMgrAC_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      ${finalName}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/70b.iTvMgrAC_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      ${finalName}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/75.EPGManager_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/76.RoviEPG_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/84.ImageService_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      ${artifactId}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/999d.Admin_WS/ws/admin-ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      xtv-ws-admin
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/999d.Admin_WS/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?><finalName>
+      ${project.artifactId}
+    </finalName>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/admin-ws-client/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/cas-sync-core/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/cas-sync-db/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/cas-sync-entities/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/cas-sync-web/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/999e.CAS_Sync_tool/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
+
+http://serverbuild1.minervanetworks.com:8080/job/11b.QoeConnector_ML/ws/pom.xml
+<?xml version="1.0" encoding="UTF-16"?>
