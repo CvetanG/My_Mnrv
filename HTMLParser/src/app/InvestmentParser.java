@@ -83,19 +83,35 @@ public class InvestmentParser {
 	
 	public static void getGoldFromTavex() throws IOException {
 		String myUrl = "http://www.tavex.bg/zlato/#charts-modal";
+
+
+		Document tavex = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
+
+
+		Elements allElements = tavex.getElementsByClass(divGoldClass);
+
+		for (Element element : allElements) {
+			System.out.println("Gold: " + element.child(0).ownText());
+		}
+
+
+	}
+	
+	public static void getBGNUSD() throws IOException {
+		String myUrl = "https://ebb.ubb.bg/Log.aspx";
 		
 		
-			Document tavex = Jsoup.connect(myUrl)
-					.timeout(10000).validateTLSCertificates(false)
-					.get();
-			
-			
-			Elements allElements = tavex.getElementsByClass(divGoldClass);
-			
-			for (Element element : allElements) {
-				System.out.println("Gold: " + element.child(0).ownText());
-			}
+		Document doc = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
 		
+		
+		Element div = doc.getElementById("currency1").getElementsByTag("tr").get(5);
+		
+		System.out.println("USD Buy: " + div.child(3).ownText());
+		System.out.println("USD Sell: " + div.child(4).ownText());
 		
 	}
 	
@@ -109,8 +125,9 @@ public class InvestmentParser {
 		myCoinsStrings.add("5 грама златно кюлче PAMP Фортуна");
 		myCoinsStrings.add("1 унция златна китайска панда от 2009");
 		
-		getFromTavex();
-		getGoldFromTavex();
+//		getFromTavex();
+//		getGoldFromTavex();
+		getBGNUSD();
 		
 		long endTime   = System.currentTimeMillis();
 		duration(startTime, endTime);
