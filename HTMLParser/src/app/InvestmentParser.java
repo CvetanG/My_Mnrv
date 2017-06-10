@@ -42,6 +42,7 @@ public class InvestmentParser {
 	
 	public static String currencyFormater(String curr) {
 		curr = curr.replace(",", "");
+		curr = curr.replace("$", "");
 		double dCurr = Double.parseDouble(curr);
 		DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
 		df.setMinimumFractionDigits(2);
@@ -176,6 +177,21 @@ public class InvestmentParser {
 		
 	}
 	
+	public static void getEthereumPrice() throws IOException {
+		String myUrl = "https://coinmarketcap.com/currencies/ethereum/";
+		
+		Document doc = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
+		
+		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
+		
+		System.out.println(div.ownText());
+		String result = currencyFormater(div.text());
+		System.out.println("Ethereum USD: " + result);
+		
+	}
+	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
@@ -185,12 +201,14 @@ public class InvestmentParser {
 		myCoinsStrings.add("5 грама златно кюлче PAMP Фортуна");
 		myCoinsStrings.add("1 унция златна китайска панда от 2009");
 		
-		getCoinsFromTavex();
+//		getCoinsFromTavex();
 //		getBGNUSD();
 		
 //		getXAUUSD();
 		
 //		getXAUBGN();
+		
+		getEthereumPrice();
 		
 		long endTime   = System.currentTimeMillis();
 		duration(startTime, endTime);
