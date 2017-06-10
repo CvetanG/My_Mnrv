@@ -1,6 +1,8 @@
 package app;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,34 @@ public class InvestmentParser {
 		System.out.println("End Program");
 	}
 	
-	public static void getFromTavex() throws IOException {
+	public static String currencyFormater(String curr) {
+		curr = curr.replace(",", "");
+		double dCurr = Double.parseDouble(curr);
+		DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+		df.setMinimumFractionDigits(2);
+	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+	    dfs.setCurrencySymbol("");
+	    dfs.setMonetaryDecimalSeparator(',');
+	    dfs.setGroupingSeparator(' ');
+	    df.setDecimalFormatSymbols(dfs);
+	    String formCur = df.format(dCurr);
+	    return formCur;
+	}
+	
+	public static String clearFormatCurr(String curr) {
+		curr = curr.substring(0, curr.length()-4);
+		String result = currencyFormater(curr);
+		return result;
+	}
+	
+	
+	// Using this in BGNUSD
+	public static String replaceCurr(String curr) {
+		curr = curr.replace(".", ",");
+		return curr;
+	}
+	
+	public static void getCoinsFromTavex() throws IOException {
 		
 		String myUrl = "http://www.tavex.bg/zlato";
 		
@@ -67,13 +96,16 @@ public class InvestmentParser {
 						// ? element.nextElementSibling()
 						// .ownText()
 						// : "")) {
-						System.out.println(element.child(0).ownText());
+						String curCoin = element.child(0).ownText();
+						System.out.println(curCoin);
 						String htmlurElement = element.toString();
 						Document document = Jsoup.parse(htmlurElement);
 						Elements myElements = document.getElementsByClass(divPriceClass);
 						for (Element newElement : myElements) {
-							System.out.println("Sell: " + newElement.child(0).ownText());
-							System.out.println("Buy: " + newElement.child(1).child(0).ownText());
+							String result_01 = clearFormatCurr(newElement.child(0).ownText());
+							System.out.println("Sell: " + result_01);
+							String result_02 = clearFormatCurr(newElement.child(1).child(0).ownText());
+							System.out.println("Buy: " + result_02);
 						}
 					}
 				}
@@ -81,14 +113,13 @@ public class InvestmentParser {
 		}
 	}
 	
+	// Not using this method
 	public static void getGoldFromTavex() throws IOException {
 		String myUrl = "http://www.tavex.bg/zlato/#charts-modal";
-
 
 		Document tavex = Jsoup.connect(myUrl)
 				.timeout(10000).validateTLSCertificates(false)
 				.get();
-
 
 		Elements allElements = tavex.getElementsByClass(divGoldClass);
 
@@ -96,25 +127,54 @@ public class InvestmentParser {
 			System.out.println("Gold: " + element.child(0).ownText());
 		}
 
-
 	}
 	
 	public static void getBGNUSD() throws IOException {
 		String myUrl = "https://ebb.ubb.bg/Log.aspx";
-		
-		
+
 		Document doc = Jsoup.connect(myUrl)
 				.timeout(10000).validateTLSCertificates(false)
 				.get();
 		
-		
 		Element div = doc.getElementById("currency1").getElementsByTag("tr").get(5);
 		
-		System.out.println("USD Buy: " + div.child(3).ownText());
-		System.out.println("USD Sell: " + div.child(4).ownText());
+		String result_01 = replaceCurr(div.child(3).ownText());
+		System.out.println("USD Buy:: " + result_01);
+		
+		String result_02 = replaceCurr(div.child(4).ownText());
+		System.out.println("USD Sell: " + result_02);
+
+	}
+	
+	public static void getXAUUSD() throws IOException {
+		String myUrl = "https://www.bloomberg.com/quote/XAUUSD:CUR";
+
+		Document doc = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
+		
+		Elements div = doc.getElementsByClass("price");
+		
+		System.out.println(div.get(0).ownText());
+		String result = currencyFormater(div.get(0).ownText());
+		System.out.println("XAU_USD:: " + result);
 		
 	}
 	
+	public static void getXAUBGN() throws IOException {
+		String myUrl = "http://www.bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm";
+
+		Document doc = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
+		
+		Element div = (Element) doc.getElementsByClass("table").get(0).childNode(4).childNode(61).childNode(7);
+		
+		System.out.println(div.ownText());
+		String result = currencyFormater(div.ownText());
+		System.out.println("XAU_BGN: " + result);
+		
+	}
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Start Program");
@@ -125,9 +185,12 @@ public class InvestmentParser {
 		myCoinsStrings.add("5 грама златно кюлче PAMP Фортуна");
 		myCoinsStrings.add("1 унция златна китайска панда от 2009");
 		
-//		getFromTavex();
-//		getGoldFromTavex();
-		getBGNUSD();
+		getCoinsFromTavex();
+//		getBGNUSD();
+		
+//		getXAUUSD();
+		
+//		getXAUBGN();
 		
 		long endTime   = System.currentTimeMillis();
 		duration(startTime, endTime);
