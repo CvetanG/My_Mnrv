@@ -21,15 +21,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkPOI {
-		
-	public static void writeInExcel(Workbook wb, RowEntry rowEntry) throws IOException {
-		
-		Sheet worksheet = wb.getSheet("Daily");
-		
-		//Read the spreadsheet that needs to be updated
-		
-		//Access the worksheet, so that we can update / modify it. 
-		
+	
+	public static Map<String, CellStyle> createCellStyles(Workbook wb, Boolean underline) {
 		Map<String, CellStyle> myCellStyles = new HashMap<String, CellStyle>();
 		
 		CellStyle csDateRight = wb.createCellStyle();
@@ -67,21 +60,36 @@ public class WorkPOI {
 		myCellStyles.put("csUSD", csUSD);
 		myCellStyles.put("csDef", csDef);
 		
-		if (rowEntry.getUnderline()) {
+		if (underline) {
 			for (Entry<String, CellStyle> cs : myCellStyles.entrySet()) {
 				cs.getValue().setBorderBottom(CellStyle.BORDER_THIN);
 			}
 		}
+		return myCellStyles;
+		
+		
+	}
+		
+	public static void writeInExcel(Workbook wb, RowEntry rowEntry, int zeroRow) throws IOException {
+		
+		Sheet worksheet = wb.getSheet("Daily");
+		
+		//Read the spreadsheet that needs to be updated
+		
+		//Access the worksheet, so that we can update / modify it. 
+		
+		Boolean underline = rowEntry.getUnderline();
+		Map<String, CellStyle> myCellStyles = createCellStyles(wb, underline);
 		
 		// Access the second cell in second row to update the value
-//			int lastRow = worksheet.getLastRowNum();
+//		int lastRow = worksheet.getLastRowNum();
 //		int lastRow = worksheet.getPhysicalNumberOfRows();
 		
-//			int newRow = lastRow + 1;
-//		worksheet.shiftRows(2, newRow, 1, true, true);
+//		int newRow = lastRow + 1;
 		
-		// get the last cell not null 
-		int newRow = 0;
+		// get the last cell not null
+		
+		int newRow = zeroRow;
 		for (Row row : worksheet) {
 		    for (Cell cell : row) {
 		        if (cell.getCellType() != Cell.CELL_TYPE_BLANK) {
@@ -93,6 +101,7 @@ public class WorkPOI {
 		        }
 		    }
 		}
+		
 		    
 		// declare a Cell object
 		int size = 11;
@@ -196,8 +205,17 @@ public class WorkPOI {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		String path = "D:\\Tavex.xlsx";
-		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		String path = "D:\\Tavex.xlsx";
+//		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		
+		int zeroRow;
+		
+		if (path.startsWith("/home/")) {
+			zeroRow	 = 0;
+		} else {
+			zeroRow	 = 1;
+		}
+			
 		File myFile = new File(path);
 		FileInputStream fsIP = new FileInputStream(myFile);
 				
@@ -210,7 +228,7 @@ public class WorkPOI {
 				"2,279.00",
 				null,
 				null,
-				false);
+				true);
 		
 		RowEntry rowEtry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
@@ -218,10 +236,10 @@ public class WorkPOI {
 				"2,279.00",
 				null,
 				null,
-				true);
+				false);
 		
-		writeInExcel(wb, rowEtry_01);
-		writeInExcel(wb, rowEtry_02);
+		writeInExcel(wb, rowEtry_01, zeroRow);
+		writeInExcel(wb, rowEtry_02, zeroRow);
 		/*
 		writeInExcel(wb, index, buy, sell, null, diff);
 		writeInExcel(wb, index, "XAU","1.00", null, sell);
