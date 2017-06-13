@@ -50,8 +50,9 @@ public class InvestmentParser {
 		df.setMinimumFractionDigits(2);
 	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
 	    dfs.setCurrencySymbol("");
-	    dfs.setMonetaryDecimalSeparator(',');
-	    dfs.setGroupingSeparator(' ');
+	    dfs.setMonetaryDecimalSeparator('.');
+//	    dfs.setGroupingSeparator(' ');
+	    df.setGroupingUsed(false);
 	    df.setDecimalFormatSymbols(dfs);
 	    String formCur = df.format(dCurr);
 	    return formCur;
@@ -156,22 +157,25 @@ public class InvestmentParser {
 		
 		Element div = doc.getElementById("currency1").getElementsByTag("tr").get(5);
 		
-		String result_01 = replaceCurr(div.child(3).ownText());
+//		String result_01 = replaceCurr(div.child(3).ownText());
+		String result_01 = div.child(3).ownText();
 		System.out.println("USD Buy:: " + result_01);
 		
-		String result_02 = replaceCurr(div.child(4).ownText());
+//		String result_02 = replaceCurr(div.child(4).ownText());
+		String result_02 = div.child(4).ownText();
 		System.out.println("USD Sell: " + result_02);
 		
-		String result_03 = replaceCurr(div.child(2).ownText());
+//		String result_03 = replaceCurr(div.child(2).ownText());
+		String result_03 = div.child(2).ownText();
 		System.out.println("USD Sell: " + result_03);
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
 				result_01,
-				def,
+				null,
 				result_02,
-				def,
-				def,
+				null,
+				null,
 				result_03,
 				false);
 		

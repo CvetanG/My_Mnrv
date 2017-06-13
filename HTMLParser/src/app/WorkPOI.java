@@ -23,13 +23,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class WorkPOI {
 	
 	static List<RowEntry> myEntries = new ArrayList<RowEntry>();
+	static int i = 0;
 	
 	public static Map<String, CellStyle> createCellStyles(Workbook wb, Boolean underline) {
 		Map<String, CellStyle> myCellStyles = new HashMap<String, CellStyle>();
 		
 		CellStyle csDateRight = wb.createCellStyle();
 		CellStyle csHour = wb.createCellStyle();
-		CellStyle csAcc = wb.createCellStyle();
+//		CellStyle csAcc = wb.createCellStyle();
 		CellStyle csPerc = wb.createCellStyle();
 	//	CellStyle csBottBord = wb.createCellStyle();
 		CellStyle csUSD = wb.createCellStyle();
@@ -47,7 +48,7 @@ public class WorkPOI {
 		csHour.setDataFormat(
 			    createHelper.createDataFormat().getFormat("HH:MM"));
 		
-		csAcc.setDataFormat((short)4);
+//		csAcc.setDataFormat((short)4);
 		
 		csPerc.setDataFormat((short)10);
 		
@@ -57,7 +58,7 @@ public class WorkPOI {
 		
 		myCellStyles.put("csDateRight", csDateRight);
 		myCellStyles.put("csHour", csHour);
-		myCellStyles.put("csAcc", csAcc);
+//		myCellStyles.put("csAcc", csAcc);
 		myCellStyles.put("csPerc", csPerc);
 		myCellStyles.put("csUSD", csUSD);
 		myCellStyles.put("csDef", csDef);
@@ -146,27 +147,39 @@ public class WorkPOI {
 //		cellList.get(4).setCellStyle(csAcc);
 		cellList.get(4).setCellStyle(myCellStyles.get("csUSD"));
 //		cellList.get(4).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(4).setCellValue(rowEntry.getBuy());
+//		cellList.get(4).setCellValue(rowEntry.getBuy());
+		if ("XAU".equals(rowEntry.getBuy())) {
+			cellList.get(4).setCellValue(rowEntry.getBuy());
+		} else if (rowEntry.getBuy() != null) {
+			cellList.get(4).setCellValue(Double.parseDouble(rowEntry.getBuy()));
+		}
 		
 		// Column F (5)
 		if ("comp".equals(rowEntry.getMyIndF())) {
+			
 			cellList.get(5).setCellStyle(myCellStyles.get("csPerc"));
 			cellList.get(5).setCellType(Cell.CELL_TYPE_FORMULA);
-			cellList.get(5).setCellFormula("E" + (newRow + 1) + "/$J" + (newRow + 2) + "-1");
+			// 1940 + ((10 - 3) + 1) - i
+			int j = newRow + ((myEntries.size() - 3) + 1) - i;
+			cellList.get(5).setCellFormula("E" + (newRow + 1) + "/$J" + j + "-1");
 		} else {
 			cellList.get(5).setCellStyle(myCellStyles.get("csDef"));
 		}
 		
 		// Column G (6)
-		cellList.get(6).setCellStyle(myCellStyles.get("csAcc"));
+		cellList.get(6).setCellStyle(myCellStyles.get("csUSD"));
 //		cellList.get(6).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(6).setCellValue(rowEntry.getSell());
+		if (rowEntry.getSell() != null) {
+			cellList.get(6).setCellValue(Double.parseDouble(rowEntry.getSell()));
+		}
 		
 		// Column H (7)
 		if ("comp".equals(rowEntry.getMyIndH())) {
 			cellList.get(7).setCellStyle(myCellStyles.get("csPerc"));
 			cellList.get(7).setCellType(Cell.CELL_TYPE_FORMULA);
-			cellList.get(7).setCellFormula("G" + (newRow + 1) + "/$J" + (newRow + 2) + "-1");
+			int j = newRow + ((myEntries.size() - 3) + 1) - i;
+			cellList.get(7).setCellFormula("G" + (newRow + 1) + "/$J" + j + "-1");
+			i++;
 		} else {
 			cellList.get(7).setCellStyle(myCellStyles.get("csDef"));
 		}
@@ -187,7 +200,7 @@ public class WorkPOI {
 			cellList.get(9).setCellType(Cell.CELL_TYPE_FORMULA);
 			cellList.get(9).setCellFormula("G" + (newRow + 1) + "-E" + (newRow + 1));
 		} else {
-			cellList.get(9).setCellValue(rowEntry.getDiff());
+			cellList.get(9).setCellValue(Double.parseDouble(rowEntry.getDiff()));
 		}
 		
 		// Column K (10)
@@ -219,8 +232,8 @@ public class WorkPOI {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
 		
-//		String path = "D:\\Tavex.xlsx";
-		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		String path = "D:\\Tavex_01.xlsx";
+//		String path = "/home/cvetan/Downloads/Tavex.xlsx";
 		
 		List<String> myCoinsStrings = new ArrayList<>();
 		myCoinsStrings.add("1 унция златен американски бизон");
