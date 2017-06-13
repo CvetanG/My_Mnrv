@@ -15,11 +15,13 @@ public class InvestmentParser {
 	
 	static String divProdClass = "product__content";
 	static String divPriceClass = "product__price";
-	static List<String> myCoinsStrings = new ArrayList<>();
+//	static List<String> myCoinsStrings = new ArrayList<>();
 	
 	static String divGoldClass = "chart__value";
 	
-	private static void duration(long startTime, long endTime) {
+	static String def = "comp";
+	
+	public static void duration(long startTime, long endTime) {
 		long totalTime = endTime - startTime;
 		
 		int seconds = (int) (totalTime / 1000) % 60 ;
@@ -68,7 +70,9 @@ public class InvestmentParser {
 		return curr;
 	}
 	
-	public static void getCoinsFromTavex() throws IOException {
+	public static List<RowEntry> getCoinsFromTavex(List<String> myCoinsStrings) throws IOException {
+		
+		List<RowEntry> myCoinsRowEntrie = new ArrayList<RowEntry>();
 		
 		String myUrl = "http://www.tavex.bg/zlato";
 		
@@ -103,15 +107,28 @@ public class InvestmentParser {
 						Document document = Jsoup.parse(htmlurElement);
 						Elements myElements = document.getElementsByClass(divPriceClass);
 						for (Element newElement : myElements) {
-							String result_01 = clearFormatCurr(newElement.child(0).ownText());
-							System.out.println("Sell: " + result_01);
-							String result_02 = clearFormatCurr(newElement.child(1).child(0).ownText());
-							System.out.println("Buy: " + result_02);
+							String result_01 = clearFormatCurr(newElement.child(1).child(0).ownText());
+							System.out.println("Buy: " + result_01);
+							String result_02 = clearFormatCurr(newElement.child(0).ownText());
+							System.out.println("Sell: " + result_02);
+							
+							RowEntry rowEtry = new RowEntry(
+									curCoin,
+									result_01,
+									def,
+									result_02,
+									def,
+									def,
+									null,
+									false);
+							
+							myCoinsRowEntrie.add(rowEtry);
 						}
 					}
 				}
 			}
 		}
+		return myCoinsRowEntrie;
 	}
 	
 	// Not using this method
@@ -130,7 +147,7 @@ public class InvestmentParser {
 
 	}
 	
-	public static void getBGNUSD() throws IOException {
+	public static RowEntry getBGNUSD() throws IOException {
 		String myUrl = "https://ebb.ubb.bg/Log.aspx";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -144,10 +161,25 @@ public class InvestmentParser {
 		
 		String result_02 = replaceCurr(div.child(4).ownText());
 		System.out.println("USD Sell: " + result_02);
+		
+		String result_03 = replaceCurr(div.child(2).ownText());
+		System.out.println("USD Sell: " + result_03);
+		
+		RowEntry rowEntry = new RowEntry(
+				"Щатски долар",
+				result_01,
+				def,
+				result_02,
+				def,
+				def,
+				result_03,
+				false);
+		
+		return rowEntry;
 
 	}
 	
-	public static void getXAUUSD() throws IOException {
+	public static RowEntry getXAUUSD() throws IOException {
 		String myUrl = "https://www.bloomberg.com/quote/XAUUSD:CUR";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -160,9 +192,21 @@ public class InvestmentParser {
 		String result = currencyFormater(div.get(0).ownText());
 		System.out.println("XAU_USD:: " + result);
 		
+		RowEntry rowEntry = new RowEntry(
+				"XAUUSD:CUR",
+				null,
+				null,
+				null,
+				null,
+				"open",
+				result,
+				false);
+		
+		return rowEntry;
+		
 	}
 	
-	public static void getXAUBGN() throws IOException {
+	public static RowEntry getXAUBGN() throws IOException {
 		String myUrl = "http://www.bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -175,9 +219,21 @@ public class InvestmentParser {
 		String result = currencyFormater(div.ownText());
 		System.out.println("XAU_BGN: " + result);
 		
+		RowEntry rowEntry = new RowEntry(
+				"Злато (в трой унции)",
+				"XAU",
+				null,
+				"1.00",
+				null,
+				null,
+				result,
+				false);
+		
+		return rowEntry;
+		
 	}
 	
-	public static void getEthereumPrice() throws IOException {
+	public static RowEntry getEthereumPrice() throws IOException {
 		String myUrl = "https://coinmarketcap.com/currencies/ethereum/";
 		
 		Document doc = Jsoup.connect(myUrl)
@@ -190,17 +246,30 @@ public class InvestmentParser {
 		String result = currencyFormater(div.text());
 		System.out.println("Ethereum USD: " + result);
 		
+		RowEntry rowEntry = new RowEntry(
+				"Ethereum Price",
+				null,
+				null,
+				null,
+				null,
+				null,
+				result,
+				true);
+		
+		return rowEntry;
+		
 	}
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
 		
+		/*
 		myCoinsStrings.add("1 унция златен канадски кленов лист");
 //		myCoinsStrings.add("1 унция златна австрийска филхармония");
 		myCoinsStrings.add("5 грама златно кюлче PAMP Фортуна");
 		myCoinsStrings.add("1 унция златна китайска панда от 2009");
-		
+		*/
 //		getCoinsFromTavex();
 //		getBGNUSD();
 		

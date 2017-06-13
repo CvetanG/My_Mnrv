@@ -22,6 +22,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkPOI {
 	
+	static List<RowEntry> myEntries = new ArrayList<RowEntry>();
+	
 	public static Map<String, CellStyle> createCellStyles(Workbook wb, Boolean underline) {
 		Map<String, CellStyle> myCellStyles = new HashMap<String, CellStyle>();
 		
@@ -147,9 +149,13 @@ public class WorkPOI {
 		cellList.get(4).setCellValue(rowEntry.getBuy());
 		
 		// Column F (5)
-		cellList.get(5).setCellStyle(myCellStyles.get("csPerc"));
-		cellList.get(5).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(5).setCellFormula("E1932/$J1935-1");
+		if ("comp".equals(rowEntry.getMyIndF())) {
+			cellList.get(5).setCellStyle(myCellStyles.get("csPerc"));
+			cellList.get(5).setCellType(Cell.CELL_TYPE_FORMULA);
+			cellList.get(5).setCellFormula("E" + (newRow + 1) + "/$J" + (newRow + 2) + "-1");
+		} else {
+			cellList.get(5).setCellStyle(myCellStyles.get("csDef"));
+		}
 		
 		// Column G (6)
 		cellList.get(6).setCellStyle(myCellStyles.get("csAcc"));
@@ -157,25 +163,29 @@ public class WorkPOI {
 		cellList.get(6).setCellValue(rowEntry.getSell());
 		
 		// Column H (7)
-		cellList.get(7).setCellStyle(myCellStyles.get("csPerc"));
-		cellList.get(7).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(7).setCellFormula("G1932/$J1935-1");
+		if ("comp".equals(rowEntry.getMyIndH())) {
+			cellList.get(7).setCellStyle(myCellStyles.get("csPerc"));
+			cellList.get(7).setCellType(Cell.CELL_TYPE_FORMULA);
+			cellList.get(7).setCellFormula("G" + (newRow + 1) + "/$J" + (newRow + 2) + "-1");
+		} else {
+			cellList.get(7).setCellStyle(myCellStyles.get("csDef"));
+		}
 		
 		// Column I (8)
 		cellList.get(8).setCellStyle(myCellStyles.get("csDef"));
-		if (rowEntry.getMyI() == null) {
+		if ("comp".equals(rowEntry.getMyIndI())) {
 			cellList.get(8).setCellStyle(myCellStyles.get("csPerc"));
 			cellList.get(8).setCellType(Cell.CELL_TYPE_FORMULA);
-			cellList.get(8).setCellFormula("H1932-F1932");
+			cellList.get(8).setCellFormula("H" + (newRow + 1) + "-F" + (newRow + 1));
 		} else {
-			cellList.get(8).setCellValue(rowEntry.getMyI());
+			cellList.get(8).setCellValue(rowEntry.getMyIndI());
 		}
 		
 		// Column J (9)
 		cellList.get(9).setCellStyle(myCellStyles.get("csDef"));
 		if (rowEntry.getDiff() == null) {
 			cellList.get(9).setCellType(Cell.CELL_TYPE_FORMULA);
-			cellList.get(9).setCellFormula("G1932-E1932");
+			cellList.get(9).setCellFormula("G" + (newRow + 1) + "-E" + (newRow + 1));
 		} else {
 			cellList.get(9).setCellValue(rowEntry.getDiff());
 		}
@@ -183,7 +193,7 @@ public class WorkPOI {
 		// Column K (10)
 		cellList.get(10).setCellStyle(myCellStyles.get("csDef"));
 		cellList.get(10).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(10).setCellFormula("IF(G1932=G1923,\"Even\",IF(G1932>G1923,\"Up\",\"Down\"))");
+		cellList.get(10).setCellFormula("IF(G" + newRow + "=G" + (newRow - myEntries.size()) + ",\"Even\",IF(G" + newRow + ">G" + (newRow - myEntries.size()) + ",\"Up\",\"Down\"))");
 		
 		/*
 		// create 2 fonts objects
@@ -205,8 +215,20 @@ public class WorkPOI {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String path = "D:\\Tavex.xlsx";
-//		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		
+		System.out.println("Start Program");
+		long startTime = System.currentTimeMillis();
+		
+//		String path = "D:\\Tavex.xlsx";
+		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		
+		List<String> myCoinsStrings = new ArrayList<>();
+		myCoinsStrings.add("1 унция златен американски бизон");
+		myCoinsStrings.add("1 унция американски орел");
+		myCoinsStrings.add("30 грама златна китайска панда от 2017");
+		myCoinsStrings.add("1 унция златна австрийска филхармония");
+		myCoinsStrings.add("1 унция златнo австралийско Кенгуру");
+		myCoinsStrings.add("1 унция златен канадски кленов лист");
 		
 		int zeroRow;
 		
@@ -222,7 +244,23 @@ public class WorkPOI {
 		//Access the workbook                  
 		Workbook wb = new XSSFWorkbook(fsIP);
 		
-		RowEntry rowEtry_01 = new RowEntry(
+		myEntries = InvestmentParser.getCoinsFromTavex(myCoinsStrings);
+		RowEntry rowEtry_01 = InvestmentParser.getBGNUSD();
+		RowEntry rowEtry_02 = InvestmentParser.getXAUBGN();
+		RowEntry rowEtry_03 = InvestmentParser.getXAUUSD();
+		RowEntry rowEtry_04 = InvestmentParser.getEthereumPrice();
+		
+		myEntries.add(rowEtry_01);
+		myEntries.add(rowEtry_02);
+		myEntries.add(rowEtry_03);
+		myEntries.add(rowEtry_04);
+		
+		for (RowEntry rowEntry : myEntries) {
+			writeInExcel(wb, rowEntry, zeroRow);
+		}
+		
+		/*
+		RowEntry rowEntry_01 = new RowEntry(
 				"Канадски кленов лист 1 унция",
 				"2,120.00",
 				"2,279.00",
@@ -230,7 +268,7 @@ public class WorkPOI {
 				null,
 				true);
 		
-		RowEntry rowEtry_02 = new RowEntry(
+		RowEntry rowEntry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
 				"2,120.00",
 				"2,279.00",
@@ -238,9 +276,9 @@ public class WorkPOI {
 				null,
 				false);
 		
-		writeInExcel(wb, rowEtry_01, zeroRow);
-		writeInExcel(wb, rowEtry_02, zeroRow);
-		/*
+		writeInExcel(wb, rowEntry_01, zeroRow);
+		writeInExcel(wb, rowEntry_02, zeroRow);
+		
 		writeInExcel(wb, index, buy, sell, null, diff);
 		writeInExcel(wb, index, "XAU","1.00", null, sell);
 		writeInExcel(wb, index, null, null, "open", sell);
@@ -258,6 +296,9 @@ public class WorkPOI {
 		output_file.close();
 				
 		System.out.println("Done!!!");
+		System.out.println();
+		long endTime   = System.currentTimeMillis();
+		InvestmentParser.duration(startTime, endTime);
 	}
 
 }
