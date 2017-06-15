@@ -30,7 +30,7 @@ public class WorkPOI {
 		
 		CellStyle csDateRight = wb.createCellStyle();
 		CellStyle csHour = wb.createCellStyle();
-//		CellStyle csAcc = wb.createCellStyle();
+		CellStyle csAcc = wb.createCellStyle();
 		CellStyle csPerc = wb.createCellStyle();
 	//	CellStyle csBottBord = wb.createCellStyle();
 		CellStyle csUSD = wb.createCellStyle();
@@ -48,7 +48,7 @@ public class WorkPOI {
 		csHour.setDataFormat(
 			    createHelper.createDataFormat().getFormat("HH:MM"));
 		
-//		csAcc.setDataFormat((short)4);
+		csAcc.setDataFormat((short)4);
 		
 		csPerc.setDataFormat((short)10);
 		
@@ -58,7 +58,7 @@ public class WorkPOI {
 		
 		myCellStyles.put("csDateRight", csDateRight);
 		myCellStyles.put("csHour", csHour);
-//		myCellStyles.put("csAcc", csAcc);
+		myCellStyles.put("csAcc", csAcc);
 		myCellStyles.put("csPerc", csPerc);
 		myCellStyles.put("csUSD", csUSD);
 		myCellStyles.put("csDef", csDef);
@@ -145,13 +145,19 @@ public class WorkPOI {
 		
 		// Column E (4)
 //		cellList.get(4).setCellStyle(csAcc);
-		cellList.get(4).setCellStyle(myCellStyles.get("csUSD"));
 //		cellList.get(4).setCellType(Cell.CELL_TYPE_FORMULA);
 //		cellList.get(4).setCellValue(rowEntry.getBuy());
 		if ("XAU".equals(rowEntry.getBuy())) {
 			cellList.get(4).setCellValue(rowEntry.getBuy());
 		} else if (rowEntry.getBuy() != null) {
+			if (!"Щатски долар".equals(rowEntry.getIndex())) {
+				cellList.get(4).setCellStyle(myCellStyles.get("csAcc"));
+			} else {
+				cellList.get(4).setCellStyle(myCellStyles.get("csUSD"));
+			}
 			cellList.get(4).setCellValue(Double.parseDouble(rowEntry.getBuy()));
+		} else {
+			cellList.get(4).setCellStyle(myCellStyles.get("csDef"));
 		}
 		
 		// Column F (5)
@@ -167,10 +173,16 @@ public class WorkPOI {
 		}
 		
 		// Column G (6)
-		cellList.get(6).setCellStyle(myCellStyles.get("csUSD"));
 //		cellList.get(6).setCellType(Cell.CELL_TYPE_FORMULA);
 		if (rowEntry.getSell() != null) {
+			if (!"Щатски долар".equals(rowEntry.getIndex())) {
+				cellList.get(6).setCellStyle(myCellStyles.get("csAcc"));
+			} else {
+				cellList.get(6).setCellStyle(myCellStyles.get("csUSD"));
+			}
 			cellList.get(6).setCellValue(Double.parseDouble(rowEntry.getSell()));
+		} else {
+			cellList.get(6).setCellStyle(myCellStyles.get("csDef"));
 		}
 		
 		// Column H (7)
@@ -206,7 +218,14 @@ public class WorkPOI {
 		// Column K (10)
 		cellList.get(10).setCellStyle(myCellStyles.get("csDef"));
 		cellList.get(10).setCellType(Cell.CELL_TYPE_FORMULA);
-		cellList.get(10).setCellFormula("IF(G" + newRow + "=G" + (newRow - myEntries.size()) + ",\"Even\",IF(G" + newRow + ">G" + (newRow - myEntries.size()) + ",\"Up\",\"Down\"))");
+		
+		// Злато (в трой унции) lenght = 20
+		if (rowEntry.getIndex().length() > 21) {
+			cellList.get(10).setCellFormula("IF(G" + (newRow + 1) + "=G" + ((newRow + 1) - myEntries.size()) + ",\"Even\",IF(G" + (newRow + 1) + ">G" + ((newRow + 1) - myEntries.size()) + ",\"Up\",\"Down\"))");
+		} else {
+			cellList.get(10).setCellFormula("IF(J" + (newRow + 1) + "=J" + ((newRow + 1) - myEntries.size()) + ",\"Even\",IF(J" + (newRow + 1) + ">J" + ((newRow + 1) - myEntries.size()) + ",\"Up\",\"Down\"))");
+		}
+		
 		
 		/*
 		// create 2 fonts objects
