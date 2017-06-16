@@ -1,5 +1,7 @@
 package app;
 
+import org.apache.poi.xslf.model.geom.IfElseExpression;
+
 public class RowEntry {
 	
 	String index;
@@ -88,7 +90,18 @@ public class RowEntry {
 		this.underline = underline;
 	}
 	
-	
-	
+	@Override
+	public String toString() { 
+		String temp = "";
+		if (this.diff != null) {
+			temp = ",\nFix: " + this.diff;
+		}
+		String result = "Index: " + this.index + ",\n" +
+				"Buy: " + this.buy + ",\n" +
+				"Sell: " + this.sell +
+				temp;
+				
+	    return result;
+	} 
 	
 }

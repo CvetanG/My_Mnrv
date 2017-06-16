@@ -123,19 +123,19 @@ public class WorkPOI {
 		
 		// Column A (0)
 		SimpleDateFormat myDate = new SimpleDateFormat("d.M.yyyy");
-		System.out.println(myDate.format(calendar.getTime()));
+//		System.out.println(myDate.format(calendar.getTime()));
 		cellList.get(0).setCellStyle(myCellStyles.get("csDateRight"));
 		cellList.get(0).setCellValue(myDate.format(calendar.getTime()));
 		
 		// Column B (1)
 		SimpleDateFormat myTime = new SimpleDateFormat("HH:mm");
-		System.out.println(myTime.format(calendar.getTime()));
+//		System.out.println(myTime.format(calendar.getTime()));
 		cellList.get(1).setCellStyle(myCellStyles.get("csHour"));
 		cellList.get(1).setCellValue(myTime.format(calendar.getTime()));
 		
 		// Column C (2)
 		int dayOfWeek  = calendar.get(Calendar.DAY_OF_WEEK);
-		System.out.println(ExampleDate.myDayOfWeek(dayOfWeek));
+//		System.out.println(ExampleDate.myDayOfWeek(dayOfWeek));
 		cellList.get(2).setCellStyle(myCellStyles.get("csDef"));
 		cellList.get(2).setCellValue(ExampleDate.myDayOfWeek(dayOfWeek));
 		
@@ -251,8 +251,8 @@ public class WorkPOI {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
 		
-		String path = "D:\\Tavex_01.xlsx";
-//		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+//		String path = "D:\\Tavex_01.xlsx";
+		String path = "/home/cvetan/Downloads/Tavex.xlsx";
 		
 		List<String> myCoinsStrings = new ArrayList<>();
 		myCoinsStrings.add("1 унция златен американски бизон");
@@ -316,6 +316,7 @@ public class WorkPOI {
 		writeInExcel(wb, index, null, null, "open", sell);
 		writeInExcel(wb, index, null, null, null, sell);
 		*/
+		
 		//Close the InputStream  
 		fsIP.close();
 		
@@ -324,13 +325,14 @@ public class WorkPOI {
 		
 		//write changes
 		wb.write(output_file);
+		
 		//close the stream
 		output_file.close();
-				
-		System.out.println("Done!!!");
-		System.out.println();
+		
+//		System.out.println();
 		long endTime   = System.currentTimeMillis();
-		InvestmentParser.duration(startTime, endTime);
+		System.err.println(InvestmentParser.duration(startTime, endTime));
+		System.out.println("Done!!!");
 	}
 
 }

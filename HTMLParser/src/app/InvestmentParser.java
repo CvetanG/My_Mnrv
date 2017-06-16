@@ -19,17 +19,18 @@ public class InvestmentParser {
 	
 	static String divGoldClass = "chart__value";
 	
+	// for coins default value to enter formula in % cells
 	static String def = "comp";
 	
-	public static void duration(long startTime, long endTime) {
+	public static String duration(long startTime, long endTime) {
 		long totalTime = endTime - startTime;
 		
 		int seconds = (int) (totalTime / 1000) % 60 ;
 		int minutes = (int) ((totalTime / (1000*60)) % 60);
 		int milisec = (int) (totalTime - ((seconds * 1000) + (minutes * 60 * 1000)));
 		
-		System.out.print("Elapsed time: ");
 		StringBuilder sb = new StringBuilder(64);
+		sb.append("Elapsed time: ");
         sb.append(minutes);
         sb.append(" min, ");
         sb.append(seconds);
@@ -37,9 +38,10 @@ public class InvestmentParser {
         sb.append(milisec);
         sb.append(" milsec.");
         
-		System.err.println(sb.toString());
-		System.out.println();
-		System.out.println("End Program");
+//		System.err.println(sb.toString());
+//		System.out.println();
+//		System.out.println("End Program");
+		return sb.toString();
 	}
 	
 	public static String currencyFormater(String curr) {
@@ -50,7 +52,7 @@ public class InvestmentParser {
 		df.setMinimumFractionDigits(2);
 	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
 	    dfs.setCurrencySymbol("");
-	    dfs.setMonetaryDecimalSeparator('.');
+//	    dfs.setMonetaryDecimalSeparator('.');
 //	    dfs.setGroupingSeparator(' ');
 	    df.setGroupingUsed(false);
 	    df.setDecimalFormatSymbols(dfs);
@@ -66,22 +68,24 @@ public class InvestmentParser {
 	
 	
 	// Using this in BGNUSD
+	/*
 	public static String replaceCurr(String curr) {
 		curr = curr.replace(".", ",");
 		return curr;
 	}
+	*/
 	
 	public static List<RowEntry> getCoinsFromTavex(List<String> myCoinsStrings) throws IOException {
-		
-		List<RowEntry> myCoinsRowEntrie = new ArrayList<RowEntry>();
+
+		List<RowEntry> myCoinRowEntries = new ArrayList<RowEntry>();
 		
 		String myUrl = "http://www.tavex.bg/zlato";
 		
-		Document temp = Jsoup.connect(myUrl)
+		Document doc = Jsoup.connect(myUrl)
 				.timeout(10000).validateTLSCertificates(false)
 				.get();
 		
-		Elements paginations = temp.getElementsByClass("pagination__item");
+		Elements paginations = doc.getElementsByClass("pagination__item");
 		
 		int i = 0;
 		for (Element element : paginations) {
@@ -95,9 +99,9 @@ public class InvestmentParser {
 		
 			Elements allElements = tavex.getElementsByClass(divProdClass);
 			
-			for (Element element : allElements) {
-				for (String myString : myCoinsStrings) {
-					if (myString.equals(element.child(0).ownText())) {
+			for (String myCoinString : myCoinsStrings) {
+				for (Element element : allElements) {
+					if (myCoinString.equals(element.child(0).ownText())) {
 						// element.nextElementSibling()!=null
 						// ? element.nextElementSibling()
 						// .ownText()
@@ -123,13 +127,13 @@ public class InvestmentParser {
 									null,
 									false);
 							
-							myCoinsRowEntrie.add(rowEtry);
+							myCoinRowEntries.add(rowEtry);
 						}
 					}
 				}
 			}
 		}
-		return myCoinsRowEntrie;
+		return myCoinRowEntries;
 	}
 	
 	// Not using this method
@@ -281,10 +285,24 @@ public class InvestmentParser {
 		
 //		getXAUBGN();
 		
-		getEthereumPrice();
+//		getEthereumPrice();
+		
+		RowEntry rowEntry_02 = new RowEntry(
+				"Канадски кленов лист 1 унция",
+				"2,120.00",
+				null,
+				"2,279.00",
+				null,
+				null,
+				"123",
+				false);
+		
+		System.out.println(rowEntry_02.toString());
 		
 		long endTime   = System.currentTimeMillis();
 		duration(startTime, endTime);
+		
+		
 		
 	}
 }
