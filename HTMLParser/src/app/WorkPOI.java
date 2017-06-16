@@ -207,11 +207,15 @@ public class WorkPOI {
 		}
 		
 		// Column J (9)
-		cellList.get(9).setCellStyle(myCellStyles.get("csDef"));
 		if (rowEntry.getDiff() == null) {
+			cellList.get(9).setCellStyle(myCellStyles.get("csDef"));
 			cellList.get(9).setCellType(Cell.CELL_TYPE_FORMULA);
 			cellList.get(9).setCellFormula("G" + (newRow + 1) + "-E" + (newRow + 1));
+		} else if (!"Щатски долар".equals(rowEntry.getIndex())) {
+			cellList.get(9).setCellStyle(myCellStyles.get("csAcc"));
+			cellList.get(9).setCellValue(Double.parseDouble(rowEntry.getDiff()));
 		} else {
+			cellList.get(9).setCellStyle(myCellStyles.get("csUSD"));
 			cellList.get(9).setCellValue(Double.parseDouble(rowEntry.getDiff()));
 		}
 		

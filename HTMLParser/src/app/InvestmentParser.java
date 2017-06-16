@@ -38,9 +38,6 @@ public class InvestmentParser {
         sb.append(milisec);
         sb.append(" milsec.");
         
-//		System.err.println(sb.toString());
-//		System.out.println();
-//		System.out.println("End Program");
 		return sb.toString();
 	}
 	
@@ -99,7 +96,9 @@ public class InvestmentParser {
 		
 			Elements allElements = tavex.getElementsByClass(divProdClass);
 			
+			// Iterate in arraylist
 			for (String myCoinString : myCoinsStrings) {
+				// Iterate in coin div
 				for (Element element : allElements) {
 					if (myCoinString.equals(element.child(0).ownText())) {
 						// element.nextElementSibling()!=null
@@ -110,26 +109,27 @@ public class InvestmentParser {
 						System.out.println(curCoin);
 						String htmlurElement = element.toString();
 						Document document = Jsoup.parse(htmlurElement);
+						
 						Elements myElements = document.getElementsByClass(divPriceClass);
-						for (Element newElement : myElements) {
-							String result_01 = clearFormatCurr(newElement.child(1).child(0).ownText());
-							System.out.println("Buy: " + result_01);
-							String result_02 = clearFormatCurr(newElement.child(0).ownText());
-							System.out.println("Sell: " + result_02);
+						
+						String result_01 = clearFormatCurr(myElements.get(0).child(1).child(0).ownText());
+						System.out.println("Buy: " + result_01);
+						String result_02 = clearFormatCurr(myElements.get(0).child(0).ownText());
+						System.out.println("Sell: " + result_02);
 							
-							RowEntry rowEtry = new RowEntry(
-									curCoin,
-									result_01,
-									def,
-									result_02,
-									def,
-									def,
-									null,
-									false);
+						RowEntry rowEtry = new RowEntry(
+								curCoin,
+								result_01,
+								def,
+								result_02,
+								def,
+								def,
+								null,
+								false);
 							
-							myCoinRowEntries.add(rowEtry);
-						}
+						myCoinRowEntries.add(rowEtry);
 					}
+					
 				}
 			}
 		}
