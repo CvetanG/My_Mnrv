@@ -112,8 +112,8 @@ public class WorkPOI {
 		Row lRow = worksheet.createRow(newRow);
 		for (int i = 0; i < size; i++) {
 			cellList.add(lRow.createCell(i));
-			
 		}
+		
 //		Cell cell_01 = null; 
 //		
 //		cell_01 = worksheet.getRow(newRow).getCell(0);   
@@ -255,8 +255,8 @@ public class WorkPOI {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
 		
-//		String path = "D:\\Tavex_01.xlsx";
-		String path = "/home/cvetan/Downloads/Tavex.xlsx";
+		String path = "D:\\Tavex_01.xlsx";
+//		String path = "/home/cvetan/Downloads/Tavex.xlsx";
 		
 		List<String> myCoinsStrings = new ArrayList<>();
 		myCoinsStrings.add("1 унция златен американски бизон");

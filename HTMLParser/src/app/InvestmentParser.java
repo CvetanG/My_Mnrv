@@ -49,7 +49,7 @@ public class InvestmentParser {
 		df.setMinimumFractionDigits(2);
 	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
 	    dfs.setCurrencySymbol("");
-//	    dfs.setMonetaryDecimalSeparator('.');
+	    dfs.setMonetaryDecimalSeparator('.');
 //	    dfs.setGroupingSeparator(' ');
 	    df.setGroupingUsed(false);
 	    df.setDecimalFormatSymbols(dfs);
@@ -65,12 +65,10 @@ public class InvestmentParser {
 	
 	
 	// Using this in BGNUSD
-	/*
-	public static String replaceCurr(String curr) {
-		curr = curr.replace(".", ",");
-		return curr;
-	}
-	*/
+//	public static String replaceCurr(String curr) {
+//		curr = curr.replace(".", ",");
+//		return curr;
+//	}
 	
 	public static List<RowEntry> getCoinsFromTavex(List<String> myCoinsStrings) throws IOException {
 
