@@ -1,5 +1,10 @@
 package app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxAuthInfo;
@@ -8,60 +13,57 @@ import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.json.JsonReader;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class DropboxAuth {
-	public static void main(String[] args) throws IOException {
-		String argAppInfoFile = "test.app";
-		String argAuthFileOutput = "authFile.app";
-
-		// Read app info file (contains app key and app secret)
+	
+	// Read app info file (contains app key and app secret)
+	public static DbxAppInfo readApp (String argAppInfoFile) {
 		DbxAppInfo appInfo;
 		try {
 			appInfo = DbxAppInfo.Reader.readFromFile(argAppInfoFile);
+			return appInfo;
 		} catch (JsonReader.FileLoadException ex) {
 			System.err.println("Error reading <app-info-file>: " + ex.getMessage());
 			System.exit(1);
-			return;
+			return null;
 		}
+	}
 
-		// Run through Dropbox API authorization process
+	// Run through Dropbox API authorization process
+	public static DbxAuthFinish authorization (DbxAppInfo appInfo) throws IOException {
 		DbxRequestConfig requestConfig = new DbxRequestConfig("examples-authorize");
 		DbxWebAuth webAuth = new DbxWebAuth(requestConfig, appInfo);
 		DbxWebAuth.Request webAuthRequest = DbxWebAuth.newRequestBuilder().withNoRedirect().build();
-
+	
 		String authorizeUrl = webAuth.authorize(webAuthRequest);
 		System.out.println("1. Go to " + authorizeUrl);
 		System.out.println("2. Click \"Allow\" (you might have to log in first).");
 		System.out.println("3. Copy the authorization code.");
 		System.out.print("Enter the authorization code here: ");
-
+	
 		String code = new BufferedReader(new InputStreamReader(System.in)).readLine();
 		if (code == null) {
 			System.exit(1);
-			return;
+			return null;
 		}
 		code = code.trim();
-
+	
 		DbxAuthFinish authFinish;
 		try {
 			authFinish = webAuth.finishFromCode(code);
+			System.out.println("Authorization complete.");
+			System.out.println("- User ID: " + authFinish.getUserId());
+			System.out.println("- Access Token: " + authFinish.getAccessToken());
+			return authFinish;
 		} catch (DbxException ex) {
 			System.err.println("Error in DbxWebAuth.authorize: " + ex.getMessage());
 			System.exit(1);
-			return;
+			return null;
 		}
+	
+	}
 
-		System.out.println("Authorization complete.");
-		System.out.println("- User ID: " + authFinish.getUserId());
-		System.out.println("- Access Token: " + authFinish.getAccessToken());
-
-		// Save auth information to output file.
+	// Save auth information to output file.
+	public static void saveAuth (DbxAuthFinish authFinish, DbxAppInfo appInfo, String argAuthFileOutput) throws IOException {
 		DbxAuthInfo authInfo = new DbxAuthInfo(authFinish.getAccessToken(), appInfo.getHost());
 		
 		File output = new File(argAuthFileOutput);
@@ -75,5 +77,14 @@ public class DropboxAuth {
 			System.exit(1);
 			return;
 		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		String argAppInfoFile = "test.app";
+		String argAuthFileOutput = "authFile.app";
+		
+		DbxAppInfo appInfo = readApp(argAppInfoFile);
+		DbxAuthFinish authFinish = authorization (appInfo);
+		saveAuth (authFinish, appInfo, argAuthFileOutput);
 	}
 }
