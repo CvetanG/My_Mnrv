@@ -30,10 +30,11 @@ public class RunMe {
 		myCoinsStrings.add("1 унция американски орел");
 		myCoinsStrings.add("30 грама златна китайска панда от 2017");
 		myCoinsStrings.add("1 унция златна австрийска филхармония");
-		myCoinsStrings.add("1 унция златнo австралийско Кенгуру");
+		myCoinsStrings.add("1 унция златнo Австралийско Кенгуру");
 		myCoinsStrings.add("1 унция златен канадски кленов лист");
 		
-		int zeroRow = 0;
+//		int zeroRow = 0;
+		
 		/*
 		
 		if (path.startsWith("/home/")) {
@@ -73,6 +74,8 @@ public class RunMe {
 		myEntries.add(rowEtry_02);
 		myEntries.add(rowEtry_03);
 		myEntries.add(rowEtry_04);
+		
+		int zeroRow = myEntries.size();
 		
 		for (RowEntry rowEntry : myEntries) {
 			WorkPOI.writeInExcel(wb, rowEntry, zeroRow);

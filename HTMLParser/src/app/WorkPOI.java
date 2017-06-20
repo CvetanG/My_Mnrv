@@ -1,8 +1,5 @@
 package app;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +15,6 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class WorkPOI {
 	
@@ -92,7 +88,7 @@ public class WorkPOI {
 		
 		// get the last cell not null
 		
-		int newRow = zeroRow;
+		int newRow = 0;
 		for (Row row : worksheet) {
 		    for (Cell cell : row) {
 		        if (cell.getCellType() != Cell.CELL_TYPE_BLANK) {
@@ -225,9 +221,9 @@ public class WorkPOI {
 		
 		// Злато (в трой унции) lenght = 20
 		if (rowEntry.getIndex().length() > 21) {
-			cellList.get(10).setCellFormula("IF(G" + (newRow + 1) + "=G" + ((newRow + 1) - myEntries.size()) + ",\"Even\",IF(G" + (newRow + 1) + ">G" + ((newRow + 1) - myEntries.size()) + ",\"Up\",\"Down\"))");
+			cellList.get(10).setCellFormula("IF(G" + (newRow + 1) + "=G" + ((newRow + 1 - zeroRow) - myEntries.size()) + ",\"Even\",IF(G" + (newRow + 1) + ">G" + ((newRow + 1 - zeroRow) - myEntries.size()) + ",\"Up\",\"Down\"))");
 		} else {
-			cellList.get(10).setCellFormula("IF(J" + (newRow + 1) + "=J" + ((newRow + 1) - myEntries.size()) + ",\"Even\",IF(J" + (newRow + 1) + ">J" + ((newRow + 1) - myEntries.size()) + ",\"Up\",\"Down\"))");
+			cellList.get(10).setCellFormula("IF(J" + (newRow + 1) + "=J" + ((newRow + 1 - zeroRow) - myEntries.size()) + ",\"Even\",IF(J" + (newRow + 1) + ">J" + ((newRow + 1 - zeroRow) - myEntries.size()) + ",\"Up\",\"Down\"))");
 		}
 		
 		
@@ -263,9 +259,9 @@ public class WorkPOI {
 		myCoinsStrings.add("1 унция американски орел");
 		myCoinsStrings.add("30 грама златна китайска панда от 2017");
 		myCoinsStrings.add("1 унция златна австрийска филхармония");
-		myCoinsStrings.add("1 унция златнo австралийско Кенгуру");
+		myCoinsStrings.add("1 унция златнo Австралийско Кенгуру");
 		myCoinsStrings.add("1 унция златен канадски кленов лист");
-		
+		/*
 		int zeroRow;
 		
 		if (path.startsWith("/home/")) {
@@ -279,9 +275,9 @@ public class WorkPOI {
 				
 		//Access the workbook                  
 		Workbook wb = new XSSFWorkbook(fsIP);
-		
+		*/
 		myEntries = InvestmentParser.getCoinsFromTavex(myCoinsStrings);
-		RowEntry rowEtry_01 = InvestmentParser.getBGNUSD();
+		/*RowEntry rowEtry_01 = InvestmentParser.getBGNUSD();
 		RowEntry rowEtry_02 = InvestmentParser.getXAUBGN();
 		RowEntry rowEtry_03 = InvestmentParser.getXAUUSD();
 		RowEntry rowEtry_04 = InvestmentParser.getEthereumPrice();
@@ -290,10 +286,10 @@ public class WorkPOI {
 		myEntries.add(rowEtry_02);
 		myEntries.add(rowEtry_03);
 		myEntries.add(rowEtry_04);
-		
 		for (RowEntry rowEntry : myEntries) {
 			writeInExcel(wb, rowEntry, zeroRow);
 		}
+		 */
 		
 		/*
 		RowEntry rowEntry_01 = new RowEntry(
@@ -320,7 +316,7 @@ public class WorkPOI {
 		writeInExcel(wb, index, null, null, "open", sell);
 		writeInExcel(wb, index, null, null, null, sell);
 		*/
-		
+		/*
 		//Close the InputStream  
 		fsIP.close();
 		
@@ -332,7 +328,7 @@ public class WorkPOI {
 		
 		//close the stream
 		output_file.close();
-		
+		*/
 //		System.out.println();
 		long endTime   = System.currentTimeMillis();
 		System.err.println(InvestmentParser.duration(startTime, endTime));
