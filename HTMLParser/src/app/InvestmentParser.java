@@ -13,16 +13,29 @@ import org.jsoup.select.Elements;
 
 public class InvestmentParser {
 	
-	static String divProdClass = "product__content";
-	static String divPriceClass = "product__price";
+	private static InvestmentParser instance;
+    
+	public InvestmentParser(){
+		
+	}
+    
+    public static InvestmentParser getInstance(){
+        if(instance == null){
+            instance = new InvestmentParser();
+        }
+        return instance;
+    }
+	
+	String divProdClass = "product__content";
+	String divPriceClass = "product__price";
 //	static List<String> myCoinsStrings = new ArrayList<>();
 	
-	static String divGoldClass = "chart__value";
+	String divGoldClass = "chart__value";
 	
 	// for coins default value to enter formula in % cells
-	static String def = "comp";
+	String def = "comp";
 	
-	public static String duration(long startTime, long endTime) {
+	public String duration(long startTime, long endTime) {
 		long totalTime = endTime - startTime;
 		
 		int seconds = (int) (totalTime / 1000) % 60 ;
@@ -41,7 +54,7 @@ public class InvestmentParser {
 		return sb.toString();
 	}
 	
-	public static String currencyFormater(String curr) {
+	public String currencyFormater(String curr) {
 		curr = curr.replace(",", "");
 		curr = curr.replace("$", "");
 		double dCurr = Double.parseDouble(curr);
@@ -57,7 +70,7 @@ public class InvestmentParser {
 	    return formCur;
 	}
 	
-	public static String clearFormatCurr(String curr) {
+	public String clearFormatCurr(String curr) {
 		curr = curr.substring(0, curr.length()-4);
 		String result = currencyFormater(curr);
 		return result;
@@ -70,7 +83,7 @@ public class InvestmentParser {
 //		return curr;
 //	}
 	
-	public static List<RowEntry> getCoinsFromTavex(List<String> myCoinsStrings) throws IOException {
+	public List<RowEntry> getCoinsFromTavex(List<String> myCoinsStrings) throws IOException {
 
 		List<RowEntry> myCoinRowEntries = new ArrayList<RowEntry>();
 		
@@ -135,7 +148,7 @@ public class InvestmentParser {
 	}
 	
 	// Not using this method
-	public static void getGoldFromTavex() throws IOException {
+	public void getGoldFromTavex() throws IOException {
 		String myUrl = "http://www.tavex.bg/zlato/#charts-modal";
 
 		Document tavex = Jsoup.connect(myUrl)
@@ -150,7 +163,7 @@ public class InvestmentParser {
 
 	}
 	
-	public static RowEntry getBGNUSD() throws IOException {
+	public RowEntry getBGNUSD() throws IOException {
 		String myUrl = "https://ebb.ubb.bg/Log.aspx";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -185,7 +198,7 @@ public class InvestmentParser {
 
 	}
 	
-	public static RowEntry getXAUUSD() throws IOException {
+	public RowEntry getXAUUSD() throws IOException {
 		String myUrl = "https://www.bloomberg.com/quote/XAUUSD:CUR";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -212,7 +225,7 @@ public class InvestmentParser {
 		
 	}
 	
-	public static RowEntry getXAUBGN() throws IOException {
+	public RowEntry getXAUBGN() throws IOException {
 		String myUrl = "http://www.bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm";
 
 		Document doc = Jsoup.connect(myUrl)
@@ -239,7 +252,7 @@ public class InvestmentParser {
 		
 	}
 	
-	public static RowEntry getEthereumPrice() throws IOException {
+	public RowEntry getEthereumPrice() throws IOException {
 		String myUrl = "https://coinmarketcap.com/currencies/ethereum/";
 		
 		Document doc = Jsoup.connect(myUrl)
@@ -266,7 +279,7 @@ public class InvestmentParser {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public void main(String[] args) throws IOException {
 		System.out.println("Start Program");
 		long startTime = System.currentTimeMillis();
 		

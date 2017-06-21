@@ -50,12 +50,14 @@ public class RunMe {
 		String dropboxPath = "/Finance/" + localPath;
 		
     	String argAuthFileOutput = "authFile.app";
+    	
+    	MyDropbox myDropbox = new MyDropbox();
         
-        DbxAuthInfo authInfo = MyDropbox.createAuth(argAuthFileOutput);
+        DbxAuthInfo authInfo = myDropbox.createAuth(argAuthFileOutput);
         
-        DbxClientV2 client = MyDropbox.createClient(authInfo);
+        DbxClientV2 client = myDropbox.createClient(authInfo);
         
-        File localFile = MyDropbox.getFile(client, localPath, dropboxPath);
+        File localFile = myDropbox.getFile(client, localPath, dropboxPath);
         
 //		File myFile = new File(path);
 		FileInputStream fsIP = new FileInputStream(localFile);
@@ -64,22 +66,28 @@ public class RunMe {
 		Workbook wb = new XSSFWorkbook(fsIP);
 		
 		List<RowEntry> myEntries = new ArrayList<RowEntry>();
-		myEntries = InvestmentParser.getCoinsFromTavex(myCoinsStrings);
-		RowEntry rowEtry_01 = InvestmentParser.getBGNUSD();
-		RowEntry rowEtry_02 = InvestmentParser.getXAUBGN();
-		RowEntry rowEtry_03 = InvestmentParser.getXAUUSD();
-		RowEntry rowEtry_04 = InvestmentParser.getEthereumPrice();
+		InvestmentParser myParser = new InvestmentParser();
+		
+		myEntries = myParser.getCoinsFromTavex(myCoinsStrings);
+		RowEntry rowEtry_01 = myParser.getBGNUSD();
+		RowEntry rowEtry_02 = myParser.getXAUBGN();
+		RowEntry rowEtry_03 = myParser.getXAUUSD();
+		RowEntry rowEtry_04 = myParser.getEthereumPrice();
+		
+		System.out.println("Done Parsing Websites!!!");
 		
 		myEntries.add(rowEtry_01);
 		myEntries.add(rowEtry_02);
 		myEntries.add(rowEtry_03);
 		myEntries.add(rowEtry_04);
 		
-		int zeroRow = myEntries.size();
+//		int zeroRow = myEntries.size();
 		
-		for (RowEntry rowEntry : myEntries) {
-			WorkPOI.writeInExcel(wb, rowEntry, zeroRow);
-		}
+		WorkPOI myPOI = new WorkPOI();
+		
+		myPOI.writeInExcel(wb, myEntries);
+		
+		System.out.println("Done Inserting Rows in Excel File!!!");
 		
 		//Close the InputStream  
 		fsIP.close();
@@ -94,11 +102,11 @@ public class RunMe {
 		output_file.close();
 		
 		
-        MyDropbox.uploadFile(client, localFile, dropboxPath);
+		myDropbox.uploadFile(client, localFile, dropboxPath);
         
         long endTime   = System.currentTimeMillis();
-		System.err.println(InvestmentParser.duration(startTime, endTime));
-		System.out.println("Done!!!");
+		System.err.println(myParser.duration(startTime, endTime));
+		System.out.println("All Done!!!");
 
 	}
 

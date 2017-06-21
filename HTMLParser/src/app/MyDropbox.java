@@ -23,7 +23,18 @@ import com.dropbox.core.v2.files.WriteMode;
 
 public class MyDropbox {
 	
-	public static File getFile(DbxClientV2 dbxClient, String localPath, String dropboxPath) {
+	private static MyDropbox instance;
+    
+	public MyDropbox(){}
+    
+    public static MyDropbox getInstance(){
+        if(instance == null){
+            instance = new MyDropbox();
+        }
+        return instance;
+    }
+	
+	public File getFile(DbxClientV2 dbxClient, String localPath, String dropboxPath) {
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		File localFile = new File(localPath);
@@ -61,11 +72,11 @@ public class MyDropbox {
 			}
 		}
 		
-		System.out.println("Done getting file!");
+		System.out.println("Done getting file from Dropbox!");
 		return localFile;
 	}
 	
-	public static void uploadFile(DbxClientV2 dbxClient, File localFile, String dropboxPath) {
+	public void uploadFile(DbxClientV2 dbxClient, File localFile, String dropboxPath) {
         try (InputStream in = new FileInputStream(localFile)) {
             FileMetadata metadata = dbxClient.files().uploadBuilder(dropboxPath)
 //                .withMode(WriteMode.ADD) // to change the mode to OVERWRITE
@@ -84,11 +95,11 @@ public class MyDropbox {
             System.err.println("Error reading from file \"" + localFile + "\": " + ex.getMessage());
             System.exit(1);
         }
-        System.out.println("Done uploading file!");
+        System.out.println("Done uploading file in Dropbox!");
 	}
 	
 	// Get files and folder metadata from Dropbox root directory
-	public static void getRootDir(DbxClientV2 client) throws ListFolderErrorException, DbxException {
+	public void getRootDir(DbxClientV2 client) throws ListFolderErrorException, DbxException {
 	    ListFolderResult result = client.files().listFolder("");
 	    while (true) {
 	        for (Metadata metadata : result.getEntries()) {
@@ -103,7 +114,7 @@ public class MyDropbox {
 	    }
 	}
 	
-	public static DbxAuthInfo createAuth(String argAuthFileOutput) {
+	public DbxAuthInfo createAuth(String argAuthFileOutput) {
 		DbxAuthInfo authInfo;
 	    try {
 	        authInfo = DbxAuthInfo.Reader.readFromFile(argAuthFileOutput);
@@ -116,7 +127,7 @@ public class MyDropbox {
 	}
 	
 	// Create a DbxClientV2, which is what you use to make API calls.
-	public static DbxClientV2 createClient(DbxAuthInfo authInfo) throws DbxApiException, DbxException {
+	public DbxClientV2 createClient(DbxAuthInfo authInfo) throws DbxApiException, DbxException {
 		DbxRequestConfig requestConfig = new DbxRequestConfig("examples-upload-file");
         DbxClientV2 client = new DbxClientV2(requestConfig, authInfo.getAccessToken(), authInfo.getHost());
         System.out.println("Linked account: " + client.users().getCurrentAccount());
@@ -129,14 +140,16 @@ public class MyDropbox {
 		String dropboxPath = "/Finance/" + localPath;
 		
     	String argAuthFileOutput = "authFile.app";
+    	
+    	MyDropbox myDropbox = new MyDropbox();
         
-        DbxAuthInfo authInfo = createAuth(argAuthFileOutput);
+        DbxAuthInfo authInfo = myDropbox.createAuth(argAuthFileOutput);
         
-        DbxClientV2 client = createClient(authInfo);
+        DbxClientV2 client = myDropbox.createClient(authInfo);
         
 //        getRootDir(client);
-        File localFile = getFile(client, localPath, dropboxPath);
-        uploadFile(client, localFile, dropboxPath);
+        File localFile = myDropbox.getFile(client, localPath, dropboxPath);
+        myDropbox.uploadFile(client, localFile, dropboxPath);
         
     }
 }
