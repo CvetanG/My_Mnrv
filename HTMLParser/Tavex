@@ -1,7 +1,7 @@
-set root=D:\workspace\My_Mnrv\HTMLParser
+#!/bin/bash
 
-chcp UTF-8
+root=/home/cvetan/git/My_Mnvr/HTMLParser
 
-CD /D %root%
+cd ${root}
 
 java -cp target/HTMLParser-0.0.1-SNAPSHOT-jar-with-dependencies.jar app.RunMe
