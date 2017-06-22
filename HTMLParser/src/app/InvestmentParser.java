@@ -111,7 +111,7 @@ public class InvestmentParser {
 			for (String myCoinString : myCoinsStrings) {
 				// Iterate in coin div
 				for (Element element : allElements) {
-					if (myCoinString.equalsIgnoreCase(element.child(0).ownText())) {
+					if (myCoinString.equals(element.child(0).ownText())) {
 						// element.nextElementSibling()!=null
 						// ? element.nextElementSibling()
 						// .ownText()
