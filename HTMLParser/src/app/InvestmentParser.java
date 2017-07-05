@@ -164,7 +164,8 @@ public class InvestmentParser {
 	}
 	
 	public RowEntry getBGNUSD() throws IOException {
-		String myUrl = "https://ebb.ubb.bg/Log.aspx";
+//		String myUrl = "https://ebb.ubb.bg/Log.aspx";
+		String myUrl = "https://ebb.ubb.bg/ebank/Log.aspx";
 
 		Document doc = Jsoup.connect(myUrl)
 				.timeout(10000).validateTLSCertificates(false)
