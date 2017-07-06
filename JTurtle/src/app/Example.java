@@ -3,16 +3,11 @@ package app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.Principal;
-import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -52,11 +47,11 @@ public class Example {
 	}
 	
 	private Example(){
-		prepareGUI();
 	}
 
 	public static void main (String[] args) {
 		Example myExample = new Example();
+		myExample.prepareGUI();
 	}
 
 	class CustomActionListenerDraw implements ActionListener{
@@ -141,26 +136,22 @@ public class Example {
 		bList.add(btn3);
 		bList.add(btn4);
 		
+		// to apply setting to Buttons
 		for (JButton jButton : bList) {
 			jButton.setMinimumSize(d);
 		}
 		
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(
-								GroupLayout.Alignment.CENTER)
-								.addComponent(btn1)
-								.addComponent(btn2)
-								.addComponent(btn3)
-								.addComponent(btn4)
-								)));
-
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(btn1)
-				.addComponent(btn2)
-				.addComponent(btn3)
-				.addComponent(btn4)
-				);
+		GroupLayout.SequentialGroup bSeqGroup = layout.createSequentialGroup();
+		GroupLayout.ParallelGroup bParGroup = layout.createParallelGroup(GroupLayout.Alignment.CENTER);
+		
+		for (JButton jButton : bList) {
+			bParGroup.addComponent(jButton);
+			bSeqGroup.addComponent(jButton);
+		}
+		
+		layout.setHorizontalGroup(bParGroup);
+		
+		layout.setVerticalGroup(bSeqGroup);
 		
 		panel.setLayout(layout);
 		controlPanel.add(panel);
@@ -172,7 +163,7 @@ public class Example {
 		joe = new Turtle(myTFrame, Color.green); // Create a green turtle in her 
 		//own window.
 		joe.hideTurtle();
-		joe.setLineWidth(2);
+		joe.setLineWidth(3);
 		myTFrame.setVisible(true);
 		/*
 		BorderLayout borderLayout = new BorderLayout();
