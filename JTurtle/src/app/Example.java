@@ -19,10 +19,20 @@ public class Example {
 
 	private JPanel controlPanel;
 	private JPanel panel;
-	private Boolean check = false;
 
 	private TurtleFrame myTFrame;
 	private Turtle joe;
+	private String shape = "";
+	
+	public enum Shape {
+	    Squares,
+	    Triangle,
+	    Hexagon,
+	    Star,
+	    Spiral,
+	    Sun,
+	    SpiralTriangles
+	}
 	
 	private final Thread t;
 	{
@@ -30,11 +40,34 @@ public class Example {
 			public void run() {
 				while (!Thread.interrupted()) {
 					try {
-						if (check) {
-							drawRect();
+						switch (shape) {
+						case "Squares":
+							drawSquares();
+							break;
+						case "Triangle":
+							drawTriangle();
+							break;
+						case "Hexagon":
+							drawHex();
+							break;
+						case "Star":
+							drawStar();
+							break;
+						case "Spiral":
+							drawSpiral();
+							break;
+						case "Sun":
+							drawSun();
+							break;
+						case "SpiralTriangles":
+							drawSpiralTriangles();
+							break;
+
+						default:
+							break;
+						}
 							Thread.sleep(1000);
 //							Thread.sleep(1 * 60 * 1000);
-						}
 					} catch (Throwable t) {
 						t.printStackTrace();
 					}
@@ -54,47 +87,16 @@ public class Example {
 		myExample.prepareGUI();
 	}
 
-	class CustomActionListenerDraw implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			check=true;
-		}
-	}
-
-	class CustomActionListenerReset implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			resetTurtle();
-		}
-	}
-
-	class CustomActionListenerHide implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			joe.hideTurtle();
-		}
-	}
-
-	class CustomActionListenerShow implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			joe.showTurtle();
-		}
-	}
-
 	private void resetTurtle() {
 		joe.home();
 		myTFrame.getPlayground().clear();
 	}
 	
-	private void drawRect() {
+	private void drawSquares() {
 		joe.showTurtle();
 		joe.setPos(-100, 100);                 // Place joe to the Point(-100,100).
 		joe.setPenColor(Color.blue);
+		joe.pd();
 		for (int i = 0; i < 4; i++) {
 			joe.rt(90).fd(200);                 // turn 90 degrees to the right, then 
 												// move forward 200 pixels.
@@ -105,7 +107,88 @@ public class Example {
 		for (int i = 0; i < 4; i++) {
 			joe.rt(90).fd(100);
 		}
-		check=false;
+		shape = "";
+	}
+	
+	private void drawTriangle() {
+		joe.showTurtle();
+		joe.setPenColor(Color.blue);
+		joe.pd();
+		for (int i = 0; i < 4; i++) {
+			
+			for (int j = 0; j < 3; j++) {
+				joe.fd(200).rt(-120);                 // turn 90 degrees to the right, then 
+				// move forward 200 pixels.
+			}
+			joe.rt(-30);
+			joe.pu().fd(50);
+			joe.pd().fd(100);
+			joe.pu().bk(150);
+			joe.rt(120);
+			joe.pd();
+			
+		}
+		
+		shape = "";
+	}
+	
+	private void drawHex() {
+		joe.showTurtle();
+		joe.setPos(-86, 50);
+		joe.setPenColor(Color.blue);
+		joe.pd();
+		for (int i = 0; i < 6; i++) {
+			joe.rt(60).fd(100); 
+		}
+		
+		shape = "";
+	}
+	
+	private void drawStar() {
+		joe.showTurtle();
+		joe.setPenColor(Color.green);
+		joe.pd();
+		for (int i = 0; i < 5; i++) {
+			joe.fd(200).rt(144); 
+		}
+		
+		shape = "";
+	}
+	
+	private void drawSpiral() {
+		joe.showTurtle();
+		joe.setPenColor(Color.blue);
+		joe.pd();
+		for (int i = 0; i < 20; i++) {
+			joe.fd(10 + i*10).rt(60); 
+		}
+		
+		shape = "";
+	}
+	
+	private void drawSun() {
+		joe.showTurtle();
+		joe.setPenColor(Color.blue);
+		joe.pd();
+		for (int i = 0; i < 36; i++) {
+			joe.fd(200).rt(170); 
+		}
+		
+		shape = "";
+	}
+	
+	private void drawSpiralTriangles() {
+		joe.showTurtle();
+		joe.setPenColor(Color.red);
+		joe.pd();
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 21; j++) {
+				joe.rt(120).fd(20 + j*10); 
+			}
+			joe.rt(120);
+		}
+		
+		shape = "";
 	}
 
 	private void prepareGUI() {
@@ -116,27 +199,87 @@ public class Example {
 		GroupLayout layout = new GroupLayout(panel);
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
-		Dimension d = new Dimension(150, 20);
 		
 		JButton btn1 = new JButton("Rectangular");
-		btn1.addActionListener(new CustomActionListenerDraw());
+		btn1.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	shape = Shape.Squares.toString();
+	        }
+	    });
 
 		JButton btn2 = new JButton("Reset");
-		btn2.addActionListener(new CustomActionListenerReset());
+		btn2.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	resetTurtle();
+	        }
+	    });
 
-		JButton btn3 = new JButton("Hide");
-		btn3.addActionListener(new CustomActionListenerHide());
+		JButton btn3 = new JButton("Hide / Show");
+		btn3.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	if (joe.isHidden()) {
+	        		joe.showTurtle();
+				} else {
+					joe.hideTurtle();
+				}
+	        }
+	    });
 
-		JButton btn4 = new JButton("Show");
-		btn4.addActionListener(new CustomActionListenerShow());
+		JButton btn4 = new JButton("Triangle");
+		btn4.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	shape = Shape.Triangle.toString();
+	        }
+	    });
+		
+		JButton btn5 = new JButton("Hexagon");
+		btn5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shape = Shape.Hexagon.toString();
+			}
+		});
+		
+		JButton btn6 = new JButton("Star");
+		btn6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shape = Shape.Star.toString();
+			}
+		});
+		
+		JButton btn7 = new JButton("Spiral");
+		btn7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shape = Shape.Spiral.toString();
+			}
+		});
+		
+		JButton btn8 = new JButton("Sun");
+		btn8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shape = Shape.Sun.toString();
+			}
+		});
+		
+		JButton btn9 = new JButton("Spiral Triangles");
+		btn9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				shape = Shape.SpiralTriangles.toString();
+			}
+		});
 		
 		List<JButton> bList = new ArrayList<>();
 		bList.add(btn1);
 		bList.add(btn2);
 		bList.add(btn3);
 		bList.add(btn4);
+		bList.add(btn5);
+		bList.add(btn6);
+		bList.add(btn7);
+		bList.add(btn8);
+		bList.add(btn9);
 		
-		// to apply setting to Buttons
+		Dimension d = new Dimension(150, 40);
+		// to apply setting to All Buttons
 		for (JButton jButton : bList) {
 			jButton.setMinimumSize(d);
 		}
@@ -163,7 +306,7 @@ public class Example {
 		joe = new Turtle(myTFrame, Color.green); // Create a green turtle in her 
 		//own window.
 		joe.hideTurtle();
-		joe.setLineWidth(3);
+		joe.setLineWidth(5);
 		myTFrame.setVisible(true);
 		/*
 		BorderLayout borderLayout = new BorderLayout();
