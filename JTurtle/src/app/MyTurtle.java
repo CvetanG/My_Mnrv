@@ -15,13 +15,19 @@ import javax.swing.JPanel;
 import ch.aplu.turtle.Turtle;
 import ch.aplu.turtle.TurtleFrame;
 
-public class Example {
+/**
+ * 
+ * @author Cvetan Georgiev
+ * Jul 7, 2017
+ */
+
+public class MyTurtle {
 
 	private JPanel controlPanel;
 	private JPanel panel;
 
 	private TurtleFrame myTFrame;
-	private Turtle joe;
+	private Turtle turtle;
 	private String shape = "";
 	
 	public enum Shape {
@@ -79,53 +85,53 @@ public class Example {
 		t.start();
 	}
 	
-	private Example(){
+	private MyTurtle(){
 	}
 
 	public static void main (String[] args) {
-		Example myExample = new Example();
+		MyTurtle myExample = new MyTurtle();
 		myExample.prepareGUI();
 	}
 
 	private void resetTurtle() {
-		joe.home();
+		turtle.home();
 		myTFrame.getPlayground().clear();
 	}
 	
 	private void drawSquares() {
-		joe.showTurtle();
-		joe.setPos(-100, 100);                 // Place joe to the Point(-100,100).
-		joe.setPenColor(Color.blue);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPos(-100, 100);                 // Place joe to the Point(-100,100).
+		turtle.setPenColor(Color.blue);
+		turtle.pd();
 		for (int i = 0; i < 4; i++) {
-			joe.rt(90).fd(200);                 // turn 90 degrees to the right, then 
+			turtle.rt(90).fd(200);                 // turn 90 degrees to the right, then 
 												// move forward 200 pixels.
 		}
-		joe.setPenColor(Color.red);           // set the pen color to red.
-		joe.pu();                             // lifts the pen off the canvas
-		joe.bk(50).lt(90).bk(50).rt(90).pd();
+		turtle.setPenColor(Color.red);           // set the pen color to red.
+		turtle.pu();                             // lifts the pen off the canvas
+		turtle.bk(50).lt(90).bk(50).rt(90).pd();
 		for (int i = 0; i < 4; i++) {
-			joe.rt(90).fd(100);
+			turtle.rt(90).fd(100);
 		}
 		shape = "";
 	}
 	
 	private void drawTriangle() {
-		joe.showTurtle();
-		joe.setPenColor(Color.blue);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPenColor(Color.blue);
+		turtle.pd();
 		for (int i = 0; i < 4; i++) {
 			
 			for (int j = 0; j < 3; j++) {
-				joe.fd(200).rt(-120);                 // turn 90 degrees to the right, then 
+				turtle.fd(200).rt(-120);                 // turn 90 degrees to the right, then 
 				// move forward 200 pixels.
 			}
-			joe.rt(-30);
-			joe.pu().fd(50);
-			joe.pd().fd(100);
-			joe.pu().bk(150);
-			joe.rt(120);
-			joe.pd();
+			turtle.rt(-30);
+			turtle.pu().fd(50);
+			turtle.pd().fd(100);
+			turtle.pu().bk(150);
+			turtle.rt(120);
+			turtle.pd();
 			
 		}
 		
@@ -133,59 +139,59 @@ public class Example {
 	}
 	
 	private void drawHex() {
-		joe.showTurtle();
-		joe.setPos(-86, 50);
-		joe.setPenColor(Color.blue);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPos(-86, 50);
+		turtle.setPenColor(Color.blue);
+		turtle.pd();
 		for (int i = 0; i < 6; i++) {
-			joe.rt(60).fd(100); 
+			turtle.rt(60).fd(100); 
 		}
 		
 		shape = "";
 	}
 	
 	private void drawStar() {
-		joe.showTurtle();
-		joe.setPenColor(Color.green);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPenColor(Color.green);
+		turtle.pd();
 		for (int i = 0; i < 5; i++) {
-			joe.fd(200).rt(144); 
+			turtle.fd(200).rt(144); 
 		}
 		
 		shape = "";
 	}
 	
 	private void drawSpiral() {
-		joe.showTurtle();
-		joe.setPenColor(Color.blue);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPenColor(Color.blue);
+		turtle.pd();
 		for (int i = 0; i < 20; i++) {
-			joe.fd(10 + i*10).rt(60); 
+			turtle.fd(10 + i*10).rt(60); 
 		}
 		
 		shape = "";
 	}
 	
 	private void drawSun() {
-		joe.showTurtle();
-		joe.setPenColor(Color.blue);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPenColor(Color.blue);
+		turtle.pd();
 		for (int i = 0; i < 36; i++) {
-			joe.fd(200).rt(170); 
+			turtle.fd(200).rt(170); 
 		}
 		
 		shape = "";
 	}
 	
 	private void drawSpiralTriangles() {
-		joe.showTurtle();
-		joe.setPenColor(Color.red);
-		joe.pd();
+		turtle.showTurtle();
+		turtle.setPenColor(Color.red);
+		turtle.pd();
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 21; j++) {
-				joe.rt(120).fd(20 + j*10); 
+				turtle.rt(120).fd(20 + j*10); 
 			}
-			joe.rt(120);
+			turtle.rt(120);
 		}
 		
 		shape = "";
@@ -217,10 +223,10 @@ public class Example {
 		JButton btn3 = new JButton("Hide / Show");
 		btn3.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	        	if (joe.isHidden()) {
-	        		joe.showTurtle();
+	        	if (turtle.isHidden()) {
+	        		turtle.showTurtle();
 				} else {
-					joe.hideTurtle();
+					turtle.hideTurtle();
 				}
 	        }
 	    });
@@ -303,10 +309,10 @@ public class Example {
 		
 		myTFrame.add(controlPanel, BorderLayout.EAST);
 		
-		joe = new Turtle(myTFrame, Color.green); // Create a green turtle in her 
+		turtle = new Turtle(myTFrame, Color.green); // Create a green turtle in her 
 		//own window.
-		joe.hideTurtle();
-		joe.setLineWidth(5);
+		turtle.hideTurtle();
+		turtle.setLineWidth(5);
 		myTFrame.setVisible(true);
 		/*
 		BorderLayout borderLayout = new BorderLayout();
