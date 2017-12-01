@@ -73,6 +73,7 @@ public class RunMe {
 		RowEntry rowEtry_02 = myParser.getXAUBGN();
 		RowEntry rowEtry_03 = myParser.getXAUUSD();
 		RowEntry rowEtry_04 = myParser.getEthereumPrice();
+		RowEntry rowEtry_05 = myParser.getBitcoinPrice();
 		
 		System.out.println("Done Parsing Websites!!!");
 		
@@ -80,6 +81,7 @@ public class RunMe {
 		myEntries.add(rowEtry_02);
 		myEntries.add(rowEtry_03);
 		myEntries.add(rowEtry_04);
+		myEntries.add(rowEtry_05);
 		
 //		int zeroRow = myEntries.size();
 		

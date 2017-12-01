@@ -263,11 +263,38 @@ public class InvestmentParser {
 		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
 		
 		System.out.println(div.ownText());
-		String result = currencyFormater(div.text());
+		String result = currencyFormater(clearFormatCurr(div.text()));
 		System.out.println("Ethereum USD: " + result);
 		
 		RowEntry rowEntry = new RowEntry(
 				"Ethereum Price",
+				null,
+				null,
+				null,
+				null,
+				null,
+				result,
+				false);
+		
+		return rowEntry;
+		
+	}
+	
+	public RowEntry getBitcoinPrice() throws IOException {
+		String myUrl = "https://coinmarketcap.com/currencies/bitcoin/";
+		
+		Document doc = Jsoup.connect(myUrl)
+				.timeout(10000).validateTLSCertificates(false)
+				.get();
+		
+		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
+		
+		System.out.println(div.ownText());
+		String result = currencyFormater(clearFormatCurr(div.text()));
+		System.out.println("Bitcoin USD: " + result);
+		
+		RowEntry rowEntry = new RowEntry(
+				"Bitcoin Price",
 				null,
 				null,
 				null,
