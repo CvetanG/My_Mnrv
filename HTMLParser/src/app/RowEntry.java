@@ -1,27 +1,27 @@
 package app;
 
-import org.apache.poi.xslf.model.geom.IfElseExpression;
-
 public class RowEntry {
 	
 	String index;
+	Curruncy curruncy;
 	String buy;
-	String myIndF;
+	String priceDown;
 	String sell;
-	String myIndH;
-	String myIndI;
+	String priceOver;
+	String diffPerc;
 	String diff;
 	Boolean underline;
 	
-	public RowEntry(String index, String buy, String myIndF, String sell, String myIndH, String myIndI, String diff,
-			Boolean underline) {
-		super();
+	public RowEntry(String index, Curruncy curruncy, String buy,
+			String priceDown, String sell, String priceOver,
+			String diffPerc, String diff, Boolean underline) {
 		this.index = index;
+		this.curruncy = curruncy;
 		this.buy = buy;
-		this.myIndF = myIndF;
+		this.priceDown = priceDown;
 		this.sell = sell;
-		this.myIndH = myIndH;
-		this.myIndI = myIndI;
+		this.priceOver = priceOver;
+		this.diffPerc = diffPerc;
 		this.diff = diff;
 		this.underline = underline;
 	}
@@ -33,6 +33,38 @@ public class RowEntry {
 	public void setIndex(String index) {
 		this.index = index;
 	}
+	
+	public Curruncy getCurruncy() {
+		return curruncy;
+	}
+
+	public void setCurruncy(Curruncy curruncy) {
+		this.curruncy = curruncy;
+	}
+
+	public String getPriceDown() {
+		return priceDown;
+	}
+
+	public void setPriceDown(String priceDown) {
+		this.priceDown = priceDown;
+	}
+
+	public String getPriceOver() {
+		return priceOver;
+	}
+
+	public void setPriceOver(String priceOver) {
+		this.priceOver = priceOver;
+	}
+
+	public String getDiffPerc() {
+		return diffPerc;
+	}
+
+	public void setDiffPerc(String diffPerc) {
+		this.diffPerc = diffPerc;
+	}
 
 	public String getBuy() {
 		return buy;
@@ -43,11 +75,11 @@ public class RowEntry {
 	}
 
 	public String getMyIndF() {
-		return myIndF;
+		return priceDown;
 	}
 
 	public void setMyIndF(String myIndF) {
-		this.myIndF = myIndF;
+		this.priceDown = myIndF;
 	}
 
 	public String getSell() {
@@ -59,19 +91,19 @@ public class RowEntry {
 	}
 
 	public String getMyIndH() {
-		return myIndH;
+		return priceOver;
 	}
 
 	public void setMyIndH(String myIndH) {
-		this.myIndH = myIndH;
+		this.priceOver = myIndH;
 	}
 
 	public String getMyIndI() {
-		return myIndI;
+		return diffPerc;
 	}
 
 	public void setMyIndI(String myIndI) {
-		this.myIndI = myIndI;
+		this.diffPerc = myIndI;
 	}
 
 	public String getDiff() {

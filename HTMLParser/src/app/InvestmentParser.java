@@ -130,6 +130,7 @@ public class InvestmentParser {
 							
 						RowEntry rowEtry = new RowEntry(
 								curCoin,
+								Curruncy.BGN,
 								result_01,
 								def,
 								result_02,
@@ -187,6 +188,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
+				Curruncy.BGN,
 				result_01,
 				null,
 				result_02,
@@ -214,6 +216,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"XAUUSD:CUR",
+				Curruncy.USD,
 				null,
 				null,
 				null,
@@ -241,6 +244,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Злато (в трой унции)",
+				Curruncy.BGN,
 				"XAU",
 				null,
 				"1.00",
@@ -254,34 +258,17 @@ public class InvestmentParser {
 	}
 	
 	public RowEntry getEthereumPrice() throws IOException {
-		String myUrl = "https://coinmarketcap.com/currencies/ethereum/";
-		
-		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
-				.get();
-		
-		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
-		
-		System.out.println(div.ownText());
-		String result = currencyFormater(clearFormatCurr(div.text()));
-		System.out.println("Ethereum USD: " + result);
-		
-		RowEntry rowEntry = new RowEntry(
-				"Ethereum Price",
-				null,
-				null,
-				null,
-				null,
-				null,
-				result,
-				false);
-		
-		return rowEntry;
-		
+		String crypto = "ethereum";
+		return getCryptoCurruncy(crypto);
 	}
 	
 	public RowEntry getBitcoinPrice() throws IOException {
-		String myUrl = "https://coinmarketcap.com/currencies/bitcoin/";
+		String crypto = "bitcoin";
+		return getCryptoCurruncy(crypto);
+	}
+	
+	public RowEntry getCryptoCurruncy(String crypto) throws IOException {
+		String myUrl = "https://coinmarketcap.com/currencies/" + crypto + "/";
 		
 		Document doc = Jsoup.connect(myUrl)
 				.timeout(10000).validateTLSCertificates(false)
@@ -291,17 +278,31 @@ public class InvestmentParser {
 		
 		System.out.println(div.ownText());
 		String result = currencyFormater(clearFormatCurr(div.text()));
-		System.out.println("Bitcoin USD: " + result);
+		System.out.println(crypto.toUpperCase() + " USD: " + result);
 		
+		String indexName;
+		Boolean underline;
+		
+		switch (crypto) {
+        case "ethereum":  indexName = "Ethereum Price";
+        					underline = false;
+                 break;
+        case "bitcoin":  indexName = "Bitcoin Price";
+							underline = true;
+                 break;
+        default: throw new RuntimeException("Invalid Crypto Curruncy");
+		}
+			
 		RowEntry rowEntry = new RowEntry(
-				"Bitcoin Price",
+				indexName,
+				Curruncy.USD,
 				null,
 				null,
 				null,
 				null,
 				null,
 				result,
-				true);
+				underline);
 		
 		return rowEntry;
 		
@@ -328,6 +329,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
+				Curruncy.BGN,
 				"2,120.00",
 				null,
 				"2,279.00",
