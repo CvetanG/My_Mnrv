@@ -1,4 +1,4 @@
-package app;
+package app.controllers;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -11,17 +11,20 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class InvestmentParser {
+import app.entities.CurrunciesEnum;
+import app.entities.RowEntry;
+
+public class WebSitesParser {
 	
-	private static InvestmentParser instance;
+	private static WebSitesParser instance;
     
-	public InvestmentParser(){
+	public WebSitesParser(){
 		
 	}
     
-    public static InvestmentParser getInstance(){
+    public static WebSitesParser getInstance(){
         if(instance == null){
-            instance = new InvestmentParser();
+            instance = new WebSitesParser();
         }
         return instance;
     }
@@ -130,7 +133,7 @@ public class InvestmentParser {
 							
 						RowEntry rowEtry = new RowEntry(
 								curCoin,
-								Curruncy.BGN,
+								CurrunciesEnum.BGN,
 								result_01,
 								def,
 								result_02,
@@ -188,7 +191,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
-				Curruncy.BGN,
+				CurrunciesEnum.BGN,
 				result_01,
 				null,
 				result_02,
@@ -216,7 +219,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"XAUUSD:CUR",
-				Curruncy.USD,
+				CurrunciesEnum.USD,
 				null,
 				null,
 				null,
@@ -244,7 +247,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Злато (в трой унции)",
-				Curruncy.BGN,
+				CurrunciesEnum.BGN,
 				"XAU",
 				null,
 				"1.00",
@@ -295,7 +298,7 @@ public class InvestmentParser {
 			
 		RowEntry rowEntry = new RowEntry(
 				indexName,
-				Curruncy.USD,
+				CurrunciesEnum.USD,
 				null,
 				null,
 				null,
@@ -329,7 +332,7 @@ public class InvestmentParser {
 		
 		RowEntry rowEntry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
-				Curruncy.BGN,
+				CurrunciesEnum.BGN,
 				"2,120.00",
 				null,
 				"2,279.00",

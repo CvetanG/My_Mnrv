@@ -1,4 +1,4 @@
-package app;
+package app.entities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +29,10 @@ public class MyCellStyles {
 //		DataFormat df = wb.createDataFormat();
 		CreationHelper createHelper = wb.getCreationHelper();
 		
-		csDateRight.setAlignment(CellStyle.ALIGN_RIGHT);
-		csDateRight.setDataFormat((short)14);
-//		cs.setDataFormat(
-//			    createHelper.createDataFormat().getFormat("d.m.yyyy"));
+//		csDateRight.setAlignment(CellStyle.ALIGN_RIGHT);
+//		csDateRight.setDataFormat((short)14);
+		csDateRight.setDataFormat(
+			    createHelper.createDataFormat().getFormat("d.m.yyyy"));
 		
 		csHour.setDataFormat((short)14);
 		csHour.setAlignment(CellStyle.ALIGN_RIGHT);

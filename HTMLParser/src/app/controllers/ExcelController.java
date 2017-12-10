@@ -1,9 +1,10 @@
-package app;
+package app.controllers;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,29 +15,25 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-public class WorkPOI {
+import app.entities.MyCellStyles;
+import app.entities.MyColumn;
+import app.entities.RowEntry;
+import app.samples.ExampleDate;
+
+public class ExcelController {
 	
-	private static WorkPOI instance;
+	private static ExcelController instance;
     
-	public WorkPOI(){}
+	public ExcelController(){}
     
-    public static WorkPOI getInstance(){
+    public static ExcelController getInstance(){
         if(instance == null){
-            instance = new WorkPOI();
+            instance = new ExcelController();
         }
         return instance;
     }
 	
 	int correction = 1;
-	
-	public static MyColumn createMyColumn(String name, char c, int i) {
-	    try {
-	        Class<?> myColumnClass = Class.forName(name);
-	        return (MyColumn) myColumnClass.newInstance();
-	    } catch (Exception e) {
-	        return null; // react to any exception here
-	    }
-	}
 	
 	public void writeInExcel(Workbook wb, List<RowEntry> myEntries) throws IOException {
 		
@@ -85,6 +82,19 @@ public class WorkPOI {
 			    }
 			}
 			
+			// Create classes for columns
+						MyColumn dateCol 		= new MyColumn("A", 0);
+						MyColumn timeCol 		= new MyColumn("B", 1);
+						MyColumn dowCol 		= new MyColumn("C", 2);
+						MyColumn indexCol 		= new MyColumn("D", 3);
+						MyColumn currCol 		= new MyColumn("E", 4);
+						MyColumn buyCol 		= new MyColumn("F", 5);
+						MyColumn prDCol 		= new MyColumn("G", 6);
+						MyColumn sellCol 		= new MyColumn("H", 7);
+						MyColumn prOCol 		= new MyColumn("I", 8);
+						MyColumn diffPercCol 	= new MyColumn("J", 9);
+						MyColumn diffCol 		= new MyColumn("K", 10);
+						MyColumn diffPrivDCol 	= new MyColumn("L", 11);
 			    
 			// declare a Cell object
 			String[] colNames = {
@@ -103,33 +113,21 @@ public class WorkPOI {
 	//		cell_01 = worksheet.getRow(newRow).getCell(0);   
 	//		cell_01.setCellValue(myDate.format(calendar.getTime()));
 			// Get current cell value value and overwrite the value
-			Calendar calendar = Calendar.getInstance();
-			
-			// Create classes for columns
-			MyColumn dateCol 		= new MyColumn("A", 0);
-			MyColumn timeCol 		= new MyColumn("B", 1);
-			MyColumn dowCol 		= new MyColumn("C", 2);
-			MyColumn indexCol 		= new MyColumn("D", 3);
-			MyColumn currCol 		= new MyColumn("E", 4);
-			MyColumn buyCol 		= new MyColumn("F", 5);
-			MyColumn prDCol 		= new MyColumn("G", 6);
-			MyColumn sellCol 		= new MyColumn("H", 7);
-			MyColumn prOCol 		= new MyColumn("I", 8);
-			MyColumn diffPercCol 	= new MyColumn("J", 9);
-			MyColumn diffCol 		= new MyColumn("K", 10);
-			MyColumn diffPrivDCol 	= new MyColumn("L", 11);
 			
 			// Column A Date(0)
-			SimpleDateFormat myDate = new SimpleDateFormat("d.M.yyyy");
+			Calendar calendar = Calendar.getInstance();
+			Date curDate = new Date();
+//			SimpleDateFormat myDateFormat = new SimpleDateFormat("d.M.yyyy");
 	//		System.out.println(myDate.format(calendar.getTime()));
 			cellList.get(dateCol.getColNum()).setCellStyle(myCellStyles.get("csDateRight"));
-			cellList.get(dateCol.getColNum()).setCellValue(myDate.format(calendar.getTime()));
+//			cellList.get(dateCol.getColNum()).setCellValue(myDateFormat.format(calendar.getTime()));
+			cellList.get(dateCol.getColNum()).setCellValue(curDate);
 			
 			// Column B Time(1)
-			SimpleDateFormat myTime = new SimpleDateFormat("HH:mm");
+			SimpleDateFormat myTimeFormat = new SimpleDateFormat("HH:mm");
 	//		System.out.println(myTime.format(calendar.getTime()));
 			cellList.get(timeCol.getColNum()).setCellStyle(myCellStyles.get("csHour"));
-			cellList.get(timeCol.getColNum()).setCellValue(myTime.format(calendar.getTime()));
+			cellList.get(timeCol.getColNum()).setCellValue(myTimeFormat.format(calendar.getTime()));
 			
 			// Column C DoW(2)
 			int dayOfWeek  = calendar.get(Calendar.DAY_OF_WEEK);
@@ -294,7 +292,7 @@ public class WorkPOI {
 		Workbook wb = new XSSFWorkbook(fsIP);
 		*/
 		List<RowEntry> myEntries = new ArrayList<RowEntry>();
-		InvestmentParser myParser = new InvestmentParser();
+		WebSitesParser myParser = new WebSitesParser();
 		
 		myEntries = myParser.getCoinsFromTavex(myCoinsStrings);
 		/*RowEntry rowEtry_01 = InvestmentParser.getBGNUSD();

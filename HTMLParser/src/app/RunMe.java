@@ -15,6 +15,11 @@ import com.dropbox.core.DbxAuthInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 
+import app.controllers.DropboxController;
+import app.controllers.ExcelController;
+import app.controllers.WebSitesParser;
+import app.entities.RowEntry;
+
 public class RunMe {
 
 	public static void main(String[] args) throws IOException, DbxApiException, DbxException {
@@ -51,7 +56,7 @@ public class RunMe {
 		
     	String argAuthFileOutput = "authFile.app";
     	
-    	MyDropbox myDropbox = new MyDropbox();
+    	DropboxController myDropbox = new DropboxController();
         
         DbxAuthInfo authInfo = myDropbox.createAuth(argAuthFileOutput);
         
@@ -66,7 +71,7 @@ public class RunMe {
 		Workbook wb = new XSSFWorkbook(fsIP);
 		
 		List<RowEntry> myEntries = new ArrayList<RowEntry>();
-		InvestmentParser myParser = new InvestmentParser();
+		WebSitesParser myParser = new WebSitesParser();
 		
 		myEntries = myParser.getCoinsFromTavex(myCoinsStrings);
 		RowEntry rowEtry_01 = myParser.getBGNUSD();
@@ -85,7 +90,7 @@ public class RunMe {
 		
 //		int zeroRow = myEntries.size();
 		
-		WorkPOI myPOI = new WorkPOI();
+		ExcelController myPOI = new ExcelController();
 		
 		myPOI.writeInExcel(wb, myEntries);
 		

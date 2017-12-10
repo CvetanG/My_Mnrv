@@ -1,4 +1,4 @@
-package app;
+package app.controllers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,15 +21,15 @@ import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.UploadErrorException;
 import com.dropbox.core.v2.files.WriteMode;
 
-public class MyDropbox {
+public class DropboxController {
 	
-	private static MyDropbox instance;
+	private static DropboxController instance;
     
-	public MyDropbox(){}
+	public DropboxController(){}
     
-    public static MyDropbox getInstance(){
+    public static DropboxController getInstance(){
         if(instance == null){
-            instance = new MyDropbox();
+            instance = new DropboxController();
         }
         return instance;
     }
@@ -141,7 +141,7 @@ public class MyDropbox {
 		
     	String argAuthFileOutput = "authFile.app";
     	
-    	MyDropbox myDropbox = new MyDropbox();
+    	DropboxController myDropbox = new DropboxController();
         
         DbxAuthInfo authInfo = myDropbox.createAuth(argAuthFileOutput);
         

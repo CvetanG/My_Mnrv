@@ -1,10 +1,10 @@
-package app;
+package app.entities;
 
 public class MyColumn {
 	int colNum;
-	char colChar;
+	String colChar;
 	
-	public MyColumn(char colChar, int colNum) {
+	public MyColumn(String colChar, int colNum) {
 		this.colChar = colChar;
 		this.colNum = colNum;
 	}
@@ -17,11 +17,11 @@ public class MyColumn {
 		this.colNum = colNum;
 	}
 
-	public char getColChar() {
+	public String getColChar() {
 		return colChar;
 	}
 
-	public void setColChar(char colChar) {
+	public void setColChar(String colChar) {
 		this.colChar = colChar;
 	}
 	

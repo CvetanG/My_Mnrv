@@ -1,4 +1,4 @@
-package app;
+package app.controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
