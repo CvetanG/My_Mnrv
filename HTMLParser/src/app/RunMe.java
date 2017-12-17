@@ -74,19 +74,25 @@ public class RunMe {
 		WebSitesParser myParser = new WebSitesParser();
 		
 		myEntries = myParser.getCoinsFromTavex(myCoinsStrings);
-		RowEntry rowEtry_01 = myParser.getBGNUSD();
+//		RowEntry rowEtry_01 = myParser.getBGNUSD();
+//		myEntries.add(rowEtry_01);
+		
 		RowEntry rowEtry_02 = myParser.getXAUBGN();
+		myEntries.add(rowEtry_02);
+		
 		RowEntry rowEtry_03 = myParser.getXAUUSD();
+		myEntries.add(rowEtry_03);
+		
 		RowEntry rowEtry_04 = myParser.getEthereumPrice();
-		RowEntry rowEtry_05 = myParser.getBitcoinPrice();
+		myEntries.add(rowEtry_04);
+		
+		RowEntry rowEtry_05 = myParser.getMoneroPrice();
+		myEntries.add(rowEtry_05);
+		
+		RowEntry rowEtry_06 = myParser.getBitcoinPrice();
+		myEntries.add(rowEtry_06);
 		
 		System.out.println("Done Parsing Websites!!!");
-		
-		myEntries.add(rowEtry_01);
-		myEntries.add(rowEtry_02);
-		myEntries.add(rowEtry_03);
-		myEntries.add(rowEtry_04);
-		myEntries.add(rowEtry_05);
 		
 //		int zeroRow = myEntries.size();
 		

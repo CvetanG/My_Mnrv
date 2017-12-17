@@ -3,7 +3,7 @@ package app.entities;
 public class RowEntry {
 	
 	String index;
-	CurrunciesEnum curruncy;
+	CurrenciesEnum currency;
 	String buy;
 	String priceDown;
 	String sell;
@@ -12,11 +12,11 @@ public class RowEntry {
 	String diff;
 	Boolean underline;
 	
-	public RowEntry(String index, CurrunciesEnum curruncy, String buy,
+	public RowEntry(String index, CurrenciesEnum currency, String buy,
 			String priceDown, String sell, String priceOver,
 			String diffPerc, String diff, Boolean underline) {
 		this.index = index;
-		this.curruncy = curruncy;
+		this.currency = currency;
 		this.buy = buy;
 		this.priceDown = priceDown;
 		this.sell = sell;
@@ -34,12 +34,12 @@ public class RowEntry {
 		this.index = index;
 	}
 	
-	public CurrunciesEnum getCurruncy() {
-		return curruncy;
+	public CurrenciesEnum getCurruncy() {
+		return currency;
 	}
 
-	public void setCurruncy(CurrunciesEnum curruncy) {
-		this.curruncy = curruncy;
+	public void setCurruncy(CurrenciesEnum currency) {
+		this.currency = currency;
 	}
 
 	public String getPriceDown() {

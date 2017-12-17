@@ -1,12 +1,12 @@
 package app.entities;
 
-public enum CurrunciesEnum {
+public enum CurrenciesEnum {
 	BGN("BGN"),
 	USD("USD");
 	
 	private final String text;
 
-    private CurrunciesEnum(final String text) {
+    private CurrenciesEnum(final String text) {
         this.text = text;
     }
 

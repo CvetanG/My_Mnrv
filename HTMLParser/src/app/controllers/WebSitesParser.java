@@ -11,11 +11,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import app.entities.CurrunciesEnum;
+import app.entities.CurrenciesEnum;
 import app.entities.RowEntry;
 
 public class WebSitesParser {
 	
+	private static final int timeout = 50000;
 	private static WebSitesParser instance;
     
 	public WebSitesParser(){
@@ -93,7 +94,7 @@ public class WebSitesParser {
 		String myUrl = "http://www.tavex.bg/zlato";
 		
 		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
 		Elements paginations = doc.getElementsByClass("pagination__item");
@@ -105,7 +106,7 @@ public class WebSitesParser {
 		
 		for (int j = 1; j < i; j++) {
 			Document tavex = Jsoup.connect(myUrl + "/page/" + j + "/#s")
-					.timeout(10000).validateTLSCertificates(false)
+					.timeout(timeout).validateTLSCertificates(false)
 					.get();
 		
 			Elements allElements = tavex.getElementsByClass(divProdClass);
@@ -133,7 +134,7 @@ public class WebSitesParser {
 							
 						RowEntry rowEtry = new RowEntry(
 								curCoin,
-								CurrunciesEnum.BGN,
+								CurrenciesEnum.BGN,
 								result_01,
 								def,
 								result_02,
@@ -156,7 +157,7 @@ public class WebSitesParser {
 		String myUrl = "http://www.tavex.bg/zlato/#charts-modal";
 
 		Document tavex = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 
 		Elements allElements = tavex.getElementsByClass(divGoldClass);
@@ -172,7 +173,7 @@ public class WebSitesParser {
 		String myUrl = "https://ebb.ubb.bg/ebank/Log.aspx";
 
 		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
 		Element div = doc.getElementById("currency1").getElementsByTag("tr").get(5);
@@ -191,7 +192,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
-				CurrunciesEnum.BGN,
+				CurrenciesEnum.BGN,
 				result_01,
 				null,
 				result_02,
@@ -208,7 +209,7 @@ public class WebSitesParser {
 		String myUrl = "https://www.bloomberg.com/quote/XAUUSD:CUR";
 
 		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
 		Elements div = doc.getElementsByClass("price");
@@ -219,7 +220,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"XAUUSD:CUR",
-				CurrunciesEnum.USD,
+				CurrenciesEnum.USD,
 				null,
 				null,
 				null,
@@ -236,7 +237,7 @@ public class WebSitesParser {
 		String myUrl = "http://www.bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm";
 
 		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
 		Element div = (Element) doc.getElementsByClass("table").get(0).childNode(4).childNode(61).childNode(7);
@@ -247,7 +248,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Злато (в трой унции)",
-				CurrunciesEnum.BGN,
+				CurrenciesEnum.BGN,
 				"XAU",
 				null,
 				"1.00",
@@ -262,19 +263,24 @@ public class WebSitesParser {
 	
 	public RowEntry getEthereumPrice() throws IOException {
 		String crypto = "ethereum";
-		return getCryptoCurruncy(crypto);
+		return getCryptoCurrency(crypto);
 	}
 	
 	public RowEntry getBitcoinPrice() throws IOException {
 		String crypto = "bitcoin";
-		return getCryptoCurruncy(crypto);
+		return getCryptoCurrency(crypto);
 	}
 	
-	public RowEntry getCryptoCurruncy(String crypto) throws IOException {
+	public RowEntry getMoneroPrice() throws IOException {
+		String crypto = "monero";
+		return getCryptoCurrency(crypto);
+	}
+	
+	public RowEntry getCryptoCurrency(String crypto) throws IOException {
 		String myUrl = "https://coinmarketcap.com/currencies/" + crypto + "/";
 		
 		Document doc = Jsoup.connect(myUrl)
-				.timeout(10000).validateTLSCertificates(false)
+				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
 		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
@@ -290,6 +296,9 @@ public class WebSitesParser {
         case "ethereum":  indexName = "Ethereum Price";
         					underline = false;
                  break;
+        case "monero":  indexName = "Monero Price";
+        					underline = false;
+        break;
         case "bitcoin":  indexName = "Bitcoin Price";
 							underline = true;
                  break;
@@ -298,7 +307,7 @@ public class WebSitesParser {
 			
 		RowEntry rowEntry = new RowEntry(
 				indexName,
-				CurrunciesEnum.USD,
+				CurrenciesEnum.USD,
 				null,
 				null,
 				null,
@@ -332,7 +341,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
-				CurrunciesEnum.BGN,
+				CurrenciesEnum.BGN,
 				"2,120.00",
 				null,
 				"2,279.00",
@@ -349,4 +358,5 @@ public class WebSitesParser {
 		
 		
 	}
+
 }
