@@ -74,8 +74,8 @@ public class RunMe {
 		WebSitesParser myParser = new WebSitesParser();
 		
 		myEntries = myParser.getCoinsFromTavex(myCoinsStrings);
-//		RowEntry rowEtry_01 = myParser.getBGNUSD();
-//		myEntries.add(rowEtry_01);
+		RowEntry rowEtry_01 = myParser.getBGNUSD();
+		myEntries.add(rowEtry_01);
 		
 		RowEntry rowEtry_02 = myParser.getXAUBGN();
 		myEntries.add(rowEtry_02);
