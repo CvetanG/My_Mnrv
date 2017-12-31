@@ -1,8 +1,6 @@
 package app.controllers;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import app.entities.CurrenciesEnum;
+import app.entities.IndexesEnum;
 import app.entities.RowEntry;
+import app.entities.Utils;
 
 public class WebSitesParser {
 	
@@ -35,51 +35,6 @@ public class WebSitesParser {
 //	static List<String> myCoinsStrings = new ArrayList<>();
 	
 	String divGoldClass = "chart__value";
-	
-	// for coins default value to enter formula in % cells
-	String def = "comp";
-	
-	public String duration(long startTime, long endTime) {
-		long totalTime = endTime - startTime;
-		
-		int seconds = (int) (totalTime / 1000) % 60 ;
-		int minutes = (int) ((totalTime / (1000*60)) % 60);
-		int milisec = (int) (totalTime - ((seconds * 1000) + (minutes * 60 * 1000)));
-		
-		StringBuilder sb = new StringBuilder(64);
-		sb.append("Elapsed time: ");
-        sb.append(minutes);
-        sb.append(" min, ");
-        sb.append(seconds);
-        sb.append(" sec. ");
-        sb.append(milisec);
-        sb.append(" milsec.");
-        
-		return sb.toString();
-	}
-	
-	public String currencyFormater(String curr) {
-		curr = curr.replace(",", "");
-		curr = curr.replace("$", "");
-		double dCurr = Double.parseDouble(curr);
-		DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-		df.setMinimumFractionDigits(2);
-	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-	    dfs.setCurrencySymbol("");
-	    dfs.setMonetaryDecimalSeparator('.');
-//	    dfs.setGroupingSeparator(' ');
-	    df.setGroupingUsed(false);
-	    df.setDecimalFormatSymbols(dfs);
-	    String formCur = df.format(dCurr);
-	    return formCur;
-	}
-	
-	public String clearFormatCurr(String curr) {
-		curr = curr.substring(0, curr.length()-4);
-		String result = currencyFormater(curr);
-		return result;
-	}
-	
 	
 	// Using this in BGNUSD
 //	public static String replaceCurr(String curr) {
@@ -127,19 +82,20 @@ public class WebSitesParser {
 						
 						Elements myElements = document.getElementsByClass(divPriceClass);
 						
-						String result_01 = clearFormatCurr(myElements.get(0).child(1).child(0).ownText());
+						String result_01 = Utils.clearFormatCurr(myElements.get(0).child(1).child(0).ownText());
 						System.out.println("Buy: " + result_01);
-						String result_02 = clearFormatCurr(myElements.get(0).child(0).ownText());
+						String result_02 = Utils.clearFormatCurr(myElements.get(0).child(0).ownText());
 						System.out.println("Sell: " + result_02);
 							
 						RowEntry rowEtry = new RowEntry(
 								curCoin,
+								IndexesEnum.GOLD_COIN,
 								CurrenciesEnum.BGN,
 								result_01,
-								def,
+								null,
 								result_02,
-								def,
-								def,
+								null,
+								null,
 								null,
 								false);
 							
@@ -192,6 +148,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
+				IndexesEnum.USD,
 				CurrenciesEnum.BGN,
 				result_01,
 				null,
@@ -215,11 +172,12 @@ public class WebSitesParser {
 		Elements div = doc.getElementsByClass("price");
 		
 		System.out.println(div.get(0).ownText());
-		String result = currencyFormater(div.get(0).ownText());
+		String result = Utils.currencyFormater(div.get(0).ownText());
 		System.out.println("XAU_USD:: " + result);
 		
 		RowEntry rowEntry = new RowEntry(
 				"XAUUSD:CUR",
+				IndexesEnum.XAUUSD,
 				CurrenciesEnum.USD,
 				null,
 				null,
@@ -243,11 +201,12 @@ public class WebSitesParser {
 		Element div = (Element) doc.getElementsByClass("table").get(0).childNode(4).childNode(61).childNode(7);
 		
 		System.out.println(div.ownText());
-		String result = currencyFormater(div.ownText());
+		String result = Utils.currencyFormater(div.ownText());
 		System.out.println("XAU_BGN: " + result);
 		
 		RowEntry rowEntry = new RowEntry(
 				"Злато (в трой унции)",
+				IndexesEnum.GOLD,
 				CurrenciesEnum.BGN,
 				"XAU",
 				null,
@@ -276,6 +235,11 @@ public class WebSitesParser {
 		return getCryptoCurrency(crypto);
 	}
 	
+	public RowEntry getDogePrice() throws IOException {
+		String crypto = "dogecoin";
+		return getCryptoCurrency(crypto);
+	}
+	
 	public RowEntry getCryptoCurrency(String crypto) throws IOException {
 		String myUrl = "https://coinmarketcap.com/currencies/" + crypto + "/";
 		
@@ -283,11 +247,24 @@ public class WebSitesParser {
 				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
-		Element div = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
+		Element prUSD = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(1);
 		
-		System.out.println(div.ownText());
-		String result = currencyFormater(clearFormatCurr(div.text()));
-		System.out.println(crypto.toUpperCase() + " USD: " + result);
+		System.out.println(prUSD.ownText());
+		String priceUSD;
+		if ("dogecoin".equals(crypto)) {
+			priceUSD = Utils.clearFormatCurr1000(prUSD.text());
+		} else {
+			priceUSD = Utils.clearFormatCurr(prUSD.text());
+		}
+		System.out.println(crypto.toUpperCase() + " USD: " + priceUSD);
+		
+		Element prBTC = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(7);
+		
+		System.out.println(prBTC.ownText());
+		String priceBTC = prBTC.text();
+		System.out.println(crypto.toUpperCase() + " " + priceBTC);
+		
+		priceBTC = priceBTC.substring(0, priceBTC.length()-4);
 		
 		String indexName;
 		Boolean underline;
@@ -299,6 +276,10 @@ public class WebSitesParser {
         case "monero":  indexName = "Monero Price";
         					underline = false;
         break;
+        case "dogecoin":  indexName = "Dogecoin Price x 1000";
+					        priceBTC = String.valueOf(Double.parseDouble(priceBTC) * 1000);
+        					underline = false;
+        break;
         case "bitcoin":  indexName = "Bitcoin Price";
 							underline = true;
                  break;
@@ -307,13 +288,14 @@ public class WebSitesParser {
 			
 		RowEntry rowEntry = new RowEntry(
 				indexName,
+				IndexesEnum.CRYPTO,
 				CurrenciesEnum.USD,
+				priceBTC,
+				"BTC",
 				null,
 				null,
 				null,
-				null,
-				null,
-				result,
+				priceUSD,
 				underline);
 		
 		return rowEntry;
@@ -341,6 +323,7 @@ public class WebSitesParser {
 		
 		RowEntry rowEntry_02 = new RowEntry(
 				"Канадски кленов лист 1 унция",
+				IndexesEnum.DEFAULT,
 				CurrenciesEnum.BGN,
 				"2,120.00",
 				null,
@@ -353,9 +336,7 @@ public class WebSitesParser {
 		System.out.println(rowEntry_02.toString());
 		
 		long endTime   = System.currentTimeMillis();
-		duration(startTime, endTime);
-		
-		
+		Utils.duration(startTime, endTime);
 		
 	}
 

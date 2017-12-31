@@ -15,10 +15,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import app.entities.ExampleDate;
+import app.entities.IndexesEnum;
 import app.entities.MyCellStyles;
 import app.entities.MyColumn;
 import app.entities.RowEntry;
-import app.samples.ExampleDate;
+import app.entities.Utils;
 
 public class ExcelController {
 	
@@ -147,10 +149,13 @@ public class ExcelController {
 	//		cellList.get(buyColInt).setCellStyle(csAcc);
 	//		cellList.get(buyColInt).setCellType(Cell.CELL_TYPE_FORMULA);
 	//		cellList.get(buyColInt).setCellValue(rowEntry.getBuy());
-			if ("XAU".equals(rowEntry.getBuy())) {
+			if (IndexesEnum.GOLD == rowEntry.getIndexType()) {
 				cellList.get(buyCol.getColNum()).setCellValue(rowEntry.getBuy());
+			} else if (rowEntry.getBuy() != null && IndexesEnum.CRYPTO == rowEntry.getIndexType()) {
+				cellList.get(buyCol.getColNum()).setCellValue(Double.parseDouble(rowEntry.getBuy()));
+				cellList.get(buyCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
 			} else if (rowEntry.getBuy() != null) {
-				if (!"Щатски долар".equals(rowEntry.getIndex())) {
+				if (IndexesEnum.USD != rowEntry.getIndexType()) {
 					cellList.get(buyCol.getColNum()).setCellStyle(myCellStyles.get("csAcc"));
 				} else {
 					cellList.get(buyCol.getColNum()).setCellStyle(myCellStyles.get("csUSD"));
@@ -161,7 +166,7 @@ public class ExcelController {
 			}
 			
 			// Column G PriceDown(6)
-			if ("comp".equals(rowEntry.getMyIndF())) {
+			if (IndexesEnum.GOLD_COIN == rowEntry.getIndexType()) {
 				
 				cellList.get(bGoldCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
 				cellList.get(bGoldCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
@@ -171,14 +176,21 @@ public class ExcelController {
 //				"-1" да го извадим от 1
 				int j = (newRow + 1) + 7 - correction;
 				cellList.get(bGoldCol.getColNum()).setCellFormula(buyCol.getColChar() + (newRow + 1) + "/$" + diffCol.getColChar() + j + "-1");
+			} else if (IndexesEnum.CRYPTO == rowEntry.getIndexType()) {
+				cellList.get(bGoldCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
+				cellList.get(bGoldCol.getColNum()).setCellValue(rowEntry.getPriceDown());
 			} else {
 				cellList.get(bGoldCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
 			}
 			
 			// Column H Sell(7)
 	//		cellList.get(h).setCellType(Cell.CELL_TYPE_FORMULA);
-			if (rowEntry.getSell() != null) {
-				if (!"Щатски долар".equals(rowEntry.getIndex())) {
+			if (IndexesEnum.CRYPTO == rowEntry.getIndexType()) {
+				cellList.get(sellCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
+				cellList.get(sellCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
+				cellList.get(sellCol.getColNum()).setCellFormula(buyCol.getColChar() + (newRow + 1) + "/" + buyCol.getColChar() + ((newRow + 1) - entrySize) + "-1");
+			} else if (rowEntry.getSell() != null) {
+				if (IndexesEnum.USD == rowEntry.getIndexType()) {
 					cellList.get(sellCol.getColNum()).setCellStyle(myCellStyles.get("csAcc"));
 				} else {
 					cellList.get(sellCol.getColNum()).setCellStyle(myCellStyles.get("csUSD"));
@@ -189,7 +201,7 @@ public class ExcelController {
 			}
 			
 			// Column I PriceOver(8)
-			if ("comp".equals(rowEntry.getMyIndH())) {
+			if (IndexesEnum.GOLD_COIN == rowEntry.getIndexType()) {
 				cellList.get(sGoldCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
 				cellList.get(sGoldCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				int j = (newRow + 1) + 7 - correction;
@@ -201,12 +213,12 @@ public class ExcelController {
 			
 			// Column J DiffPerc(9)
 			cellList.get(diffPercCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
-			if ("comp".equals(rowEntry.getMyIndI())) {
+			if (IndexesEnum.GOLD_COIN == rowEntry.getIndexType()) {
 				cellList.get(diffPercCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
 				cellList.get(diffPercCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				cellList.get(diffPercCol.getColNum()).setCellFormula(sGoldCol.getColChar() + (newRow + 1) + "-" + bGoldCol.getColChar() + (newRow + 1));
 			} else {
-				cellList.get(diffPercCol.getColNum()).setCellValue(rowEntry.getMyIndI());
+				cellList.get(diffPercCol.getColNum()).setCellValue(rowEntry.getDiffPerc());
 			}
 			
 			// Column K Diff(10)
@@ -214,7 +226,7 @@ public class ExcelController {
 				cellList.get(diffCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
 				cellList.get(diffCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				cellList.get(diffCol.getColNum()).setCellFormula(sellCol.getColChar() + (newRow + 1) + "-"  + buyCol.getColChar() + (newRow + 1));
-			} else if (!"Щатски долар".equals(rowEntry.getIndex())) {
+			} else if (IndexesEnum.USD != rowEntry.getIndexType()) {
 				cellList.get(diffCol.getColNum()).setCellStyle(myCellStyles.get("csAcc"));
 				cellList.get(diffCol.getColNum()).setCellValue(Double.parseDouble(rowEntry.getDiff()));
 			} else {
@@ -223,25 +235,23 @@ public class ExcelController {
 			}
 			
 			// Column L DiffPrivDay(11)
-			cellList.get(diffPrivDCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
+//			cellList.get(diffPrivDCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
+//			cellList.get(diffPrivDCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
+			
+			cellList.get(diffPrivDCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
 			cellList.get(diffPrivDCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 			
-			// Злато (в трой унции) lenght = 20
-			if (rowEntry.getIndex().length() > 21) {
+			if (IndexesEnum.GOLD_COIN == rowEntry.getIndexType()) {
 //				cellList.get(diffPrivDCol.getColNum()).setCellFormula("IF(" + sellCol.getColChar() + (newRow + 1) + "="
 //										+ sellCol.getColChar() + ((newRow + 1) - entrySize) + ",\"Even\",IF("
 //										+ sellCol.getColChar() + (newRow + 1) + ">" + sellCol.getColChar()
 //										+ ((newRow + 1) - entrySize) + ",\"Up\",\"Down\"))");
-				cellList.get(diffPrivDCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
-				cellList.get(diffPrivDCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				cellList.get(diffPrivDCol.getColNum()).setCellFormula(sellCol.getColChar() + (newRow + 1) + "/" + sellCol.getColChar() + ((newRow + 1) - entrySize) + "-1");
 			} else {
 //				cellList.get(diffPrivDCol.getColNum()).setCellFormula("IF(" + diffCol.getColChar() + (newRow + 1) + "="
 //										+ diffCol.getColChar() + ((newRow + 1) - entrySize) + ",\"Even\",IF("
 //										+ diffCol.getColChar() + (newRow + 1) + ">" + diffCol.getColChar() 
 //										+ ((newRow + 1) - entrySize) + ",\"Up\",\"Down\"))");
-				cellList.get(diffPrivDCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
-				cellList.get(diffPrivDCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				cellList.get(diffPrivDCol.getColNum()).setCellFormula(diffCol.getColChar() + (newRow + 1) + "/" + diffCol.getColChar() + ((newRow + 1) - entrySize) + "-1");
 			}
 			
@@ -355,7 +365,7 @@ public class ExcelController {
 		*/
 //		System.out.println();
 		long endTime   = System.currentTimeMillis();
-		System.err.println(myParser.duration(startTime, endTime));
+		System.err.println(Utils.duration(startTime, endTime));
 		System.out.println("Done!!!");
 	}
 

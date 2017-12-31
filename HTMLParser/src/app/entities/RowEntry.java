@@ -3,6 +3,7 @@ package app.entities;
 public class RowEntry {
 	
 	String index;
+	IndexesEnum indexType;
 	CurrenciesEnum currency;
 	String buy;
 	String priceDown;
@@ -12,10 +13,11 @@ public class RowEntry {
 	String diff;
 	Boolean underline;
 	
-	public RowEntry(String index, CurrenciesEnum currency, String buy,
+	public RowEntry(String index, IndexesEnum indexType, CurrenciesEnum currency, String buy,
 			String priceDown, String sell, String priceOver,
 			String diffPerc, String diff, Boolean underline) {
 		this.index = index;
+		this.indexType = indexType;
 		this.currency = currency;
 		this.buy = buy;
 		this.priceDown = priceDown;
@@ -34,6 +36,22 @@ public class RowEntry {
 		this.index = index;
 	}
 	
+	public IndexesEnum getIndexType() {
+		return indexType;
+	}
+
+	public void setIndexType(IndexesEnum indexType) {
+		this.indexType = indexType;
+	}
+
+	public CurrenciesEnum getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(CurrenciesEnum currency) {
+		this.currency = currency;
+	}
+
 	public CurrenciesEnum getCurruncy() {
 		return currency;
 	}
@@ -74,36 +92,12 @@ public class RowEntry {
 		this.buy = buy;
 	}
 
-	public String getMyIndF() {
-		return priceDown;
-	}
-
-	public void setMyIndF(String myIndF) {
-		this.priceDown = myIndF;
-	}
-
 	public String getSell() {
 		return sell;
 	}
 
 	public void setSell(String sell) {
 		this.sell = sell;
-	}
-
-	public String getMyIndH() {
-		return priceOver;
-	}
-
-	public void setMyIndH(String myIndH) {
-		this.priceOver = myIndH;
-	}
-
-	public String getMyIndI() {
-		return diffPerc;
-	}
-
-	public void setMyIndI(String myIndI) {
-		this.diffPerc = myIndI;
 	}
 
 	public String getDiff() {
