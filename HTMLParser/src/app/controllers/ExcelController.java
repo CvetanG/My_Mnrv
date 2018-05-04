@@ -172,10 +172,10 @@ public class ExcelController {
 				cellList.get(bGoldCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
 				// 1940 + ((11 - 4) + 1) - i
 //				(newRow + 1) current row
-				// Злато (в трой унции) e 7-я индекс
-//				"-1" да го извадим от 1
-				int j = (newRow + 1) + 7 - correction;
-				cellList.get(bGoldCol.getColNum()).setCellFormula(buyCol.getColChar() + (newRow + 1) + "/$" + diffCol.getColChar() + j + "-1");
+				// Злато (в трой унции) e 8-я индекс
+//				"-1" да го извадим от Първия
+				int j = (newRow + 1) + 8 - correction;
+				cellList.get(bGoldCol.getColNum()).setCellFormula(buyCol.getColChar() + (newRow + 1) + "/$" + diffCol.getColChar() + "$" + j + "-1");
 			} else if (IndexesEnum.CRYPTO == rowEntry.getIndexType()) {
 				cellList.get(bGoldCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));
 				cellList.get(bGoldCol.getColNum()).setCellValue(rowEntry.getPriceDown());
@@ -204,8 +204,8 @@ public class ExcelController {
 			if (IndexesEnum.GOLD_COIN == rowEntry.getIndexType()) {
 				cellList.get(sGoldCol.getColNum()).setCellStyle(myCellStyles.get("csPerc"));
 				cellList.get(sGoldCol.getColNum()).setCellType(Cell.CELL_TYPE_FORMULA);
-				int j = (newRow + 1) + 7 - correction;
-				cellList.get(sGoldCol.getColNum()).setCellFormula(sellCol.getColChar() + (newRow + 1) + "/$" + diffCol.getColChar() + j + "-1");
+				int j = (newRow + 1) + 8 - correction;
+				cellList.get(sGoldCol.getColNum()).setCellFormula(sellCol.getColChar() + (newRow + 1) + "/$" + diffCol.getColChar() + "$" + j + "-1");
 				correction++;
 			} else {
 				cellList.get(sGoldCol.getColNum()).setCellStyle(myCellStyles.get("csDef"));

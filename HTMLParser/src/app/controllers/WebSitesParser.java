@@ -144,7 +144,7 @@ public class WebSitesParser {
 		
 //		String result_03 = replaceCurr(div.child(2).ownText());
 		String result_03 = div.child(2).ownText();
-		System.out.println("USD Sell: " + result_03);
+		System.out.println("USD Fixture: " + result_03);
 		
 		RowEntry rowEntry = new RowEntry(
 				"Щатски долар",
@@ -171,7 +171,7 @@ public class WebSitesParser {
 		
 		Elements div = doc.getElementsByClass("price");
 		
-		System.out.println(div.get(0).ownText());
+//		System.out.println(div.get(0).ownText());
 		String result = Utils.currencyFormater(div.get(0).ownText());
 		System.out.println("XAU_USD:: " + result);
 		
@@ -198,9 +198,9 @@ public class WebSitesParser {
 				.timeout(timeout).validateTLSCertificates(false)
 				.get();
 		
-		Element div = (Element) doc.getElementsByClass("table").get(0).childNode(4).childNode(61).childNode(7);
+		Element div = (Element) doc.getElementsByClass("table").get(0).childNode(4).childNode(63).childNode(7);
 		
-		System.out.println(div.ownText());
+//		System.out.println(div.ownText());
 		String result = Utils.currencyFormater(div.ownText());
 		System.out.println("XAU_BGN: " + result);
 		
@@ -260,7 +260,7 @@ public class WebSitesParser {
 		
 		Element prBTC = (Element) doc.getElementsByClass("col-xs-6 col-sm-8 col-md-4 text-left").get(0).childNode(7);
 		
-		System.out.println(prBTC.ownText());
+//		System.out.println(prBTC.ownText());
 		String priceBTC = prBTC.text();
 		System.out.println(crypto.toUpperCase() + " " + priceBTC);
 		

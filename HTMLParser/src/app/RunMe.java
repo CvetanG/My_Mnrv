@@ -96,6 +96,7 @@ public class RunMe {
 		RowEntry rowEtry_07 = myParser.getBitcoinPrice();
 		myEntries.add(rowEtry_07);
 		
+		System.out.println();
 		System.out.println("Done Parsing Websites!!!");
 		
 //		int zeroRow = myEntries.size();
